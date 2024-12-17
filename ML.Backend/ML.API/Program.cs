@@ -5,7 +5,8 @@ using ML.DAL.Repositories;
 using ML.SAL.Interfaces;
 using ML.SAL.Models;
 using ML.SAL.Services;
-using DotNetEnv; 
+using DotNetEnv;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,13 @@ builder.Services.AddScoped<IMovieList, MovieList>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")));
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "MovieList API", Version = "v1" });
+
+    c.CustomSchemaIds(type => type.FullName);
+});
 
 var app = builder.Build();
 
