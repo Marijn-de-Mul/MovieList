@@ -1,0 +1,200 @@
+# Node.js (for frontend)
+ML.Frontend/node_modules/
+ML.Frontend/npm-debug.log*
+ML.Frontend/yarn-debug.log*
+ML.Frontend/yarn-error.log*
+ML.Frontend/pnpm-debug.log*
+ML.Frontend/lerna-debug.log*
+
+# Remix.run (for frontend)
+ML.Frontend/.cache/
+ML.Frontend/build/
+ML.Frontend/public/build/
+ML.Frontend/remix.config.js
+
+# Tailwind CSS (for frontend)
+ML.Frontend/*.css
+
+# Mantine.dev (for frontend)
+ML.Frontend/.mantine-cache
+
+# Environment Variables
+ML.Frontend/.env.local
+ML.Frontend/.env.development.local
+ML.Frontend/.env.test.local
+ML.Frontend/.env.production.local
+
+# Log files
+logs
+*.log
+ML.Frontend/npm-debug.log*
+ML.Frontend/yarn-debug.log*
+ML.Frontend/pnpm-debug.log*
+
+# C# .NET (for backend)
+ML.Backend/bin/
+ML.Backend/obj/
+ML.Backend/*.user
+ML.Backend/*.rsuser
+ML.Backend/*.suo
+ML.Backend/*.userosscache
+ML.Backend/*.sln.docstates
+
+# Rider (for backend)
+ML.Backend/.idea/
+ML.Backend/*.sln.iml
+ML.Backend/*.csproj.iml
+
+# Rider logs
+ML.Backend/.idea/**/workspace.xml
+ML.Backend/.idea/**/tasks.xml
+
+# Rider project-specific profiles
+ML.Backend/.idea/**/inspectionProfiles
+
+# Rider modules
+ML.Backend/.idea/modules.xml
+ML.Backend/.idea/*.iml
+ML.Backend/.idea/modules
+ML.Backend/.idea/.idea
+
+# Rider workspace
+ML.Backend/.idea/workspace.xml
+
+# Rider scopes
+ML.Backend/.idea/scopes/
+
+# Rider dictionaries
+ML.Backend/.idea/dictionaries/
+
+# Rider capture
+ML.Backend/.idea/capture/
+
+# Rider libraries
+ML.Backend/.idea/libraries/
+
+# Rider code styles
+ML.Backend/.idea/codeStyles/
+
+# Rider run configurations
+ML.Backend/.idea/runConfigurations/
+
+# Rider deployment
+ML.Backend/.idea/deployment/
+
+# Rider external tools
+ML.Backend/.idea/externalTools.xml
+
+# Rider build
+ML.Backend/.idea/build/
+
+# Rider vcs.xml
+ML.Backend/.idea/vcs.xml
+
+# Rider shelf
+ML.Backend/.idea/shelf/
+
+# Rider usage statistics
+ML.Backend/.idea/statistics.xml
+
+# Rider directories
+ML.Backend/.idea/directories
+
+# Rider temp
+ML.Backend/.idea/temp
+
+# Rider file templates
+ML.Backend/.idea/fileTemplates
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage
+
+# Rider usage statistics
+ML.Backend/.idea/statistics.xml
+
+# Rider directories
+ML.Backend/.idea/directories
+
+# Rider temp
+ML.Backend/.idea/temp
+
+# Rider file templates
+ML.Backend/.idea/fileTemplates
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage
+
+# Rider usage statistics
+ML.Backend/.idea/statistics.xml
+
+# Rider directories
+ML.Backend/.idea/directories
+
+# Rider temp
+ML.Backend/.idea/temp
+
+# Rider file templates
+ML.Backend/.idea/fileTemplates
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage
+
+# Rider usage statistics
+ML.Backend/.idea/statistics.xml
+
+# Rider directories
+ML.Backend/.idea/directories
+
+# Rider temp
+ML.Backend/.idea/temp
+
+# Rider file templates
+ML.Backend/.idea/fileTemplates
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage
+
+# Rider usage statistics
+ML.Backend/.idea/statistics.xml
+
+# Rider directories
+ML.Backend/.idea/directories
+
+# Rider temp
+ML.Backend/.idea/temp
+
+# Rider file templates
+ML.Backend/.idea/fileTemplates
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage
+
+# Rider usage statistics
+ML.Backend/.idea/statistics.xml
+
+# Rider directories
+ML.Backend/.idea/directories
+
+# Rider temp
+ML.Backend/.idea/temp
+
+# Rider file templates
+ML.Backend/.idea/fileTemplates
+
+# Rider code coverage
+ML.Backend/.idea/codeCoverage

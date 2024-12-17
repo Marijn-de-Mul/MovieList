@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ML.API", "ML.API\ML.API.csproj", "{4F72F487-CB04-4398-A998-A219E1B8A4A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ML.SAL", "ML.SAL\ML.SAL.csproj", "{273EE12C-2C37-4B51-840E-150DDD5EDBBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ML.DAL", "ML.DAL\ML.DAL.csproj", "{F5300D64-28C7-4C26-A182-DBC0412833EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F72F487-CB04-4398-A998-A219E1B8A4A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F72F487-CB04-4398-A998-A219E1B8A4A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F72F487-CB04-4398-A998-A219E1B8A4A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F72F487-CB04-4398-A998-A219E1B8A4A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{273EE12C-2C37-4B51-840E-150DDD5EDBBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{273EE12C-2C37-4B51-840E-150DDD5EDBBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{273EE12C-2C37-4B51-840E-150DDD5EDBBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{273EE12C-2C37-4B51-840E-150DDD5EDBBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5300D64-28C7-4C26-A182-DBC0412833EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5300D64-28C7-4C26-A182-DBC0412833EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5300D64-28C7-4C26-A182-DBC0412833EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5300D64-28C7-4C26-A182-DBC0412833EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
