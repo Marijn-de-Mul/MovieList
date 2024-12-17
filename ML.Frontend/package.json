@@ -16,6 +16,7 @@
     "@remix-run/serve": "^2.15.1",
     "axios": "^1.7.9",
     "isbot": "^4.1.0",
+    "js-cookie": "^3.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

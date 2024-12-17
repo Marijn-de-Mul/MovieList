@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Link } from 'react-router-dom';
+import axiosInstance from '../axiosInstance';
 
 export default function MovieLists() {
   const [lists, setLists] = useState([]);
@@ -12,33 +13,29 @@ export default function MovieLists() {
   }, []);
 
   const fetchLists = async () => {
-    const response = await axios.get('/api/MovieList');
+    const response = await axiosInstance.get('/api/MovieList');
     setLists(response.data);
   };
 
   const createList = async () => {
-    await axios.post('/api/MovieList', { name: newListName });
+    await axiosInstance.post('/api/MovieList', { name: newListName });
     setNewListName('');
     fetchLists();
   };
 
   const editList = async (id, name) => {
-    await axios.put(`/api/MovieList/${id}`, { name });
+    await axiosInstance.put(`/api/MovieList/${id}`, { name });
     fetchLists();
   };
 
   const deleteList = async (id) => {
-    await axios.delete(`/api/MovieList/${id}`);
+    await axiosInstance.delete(`/api/MovieList/${id}`);
     fetchLists();
   };
 
   const shareList = async (id) => {
-    await axios.post(`/api/MovieList/${id}/share`, { username: shareUser });
+    await axiosInstance.post(`/api/MovieList/${id}/share`, { username: shareUser });
     setShareUser('');
-  };
-
-  const removeUserFromList = async (id, userId) => {
-    await axios.delete(`/api/MovieList/${id}/user/${userId}`);
   };
 
   return (
@@ -96,6 +93,13 @@ export default function MovieLists() {
           </div>
         ))}
       </div>
+
+      <Link
+        to="/"
+        className="fixed bottom-4 right-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+      >
+        Back to Main Menu
+      </Link>
     </div>
   );
 }
