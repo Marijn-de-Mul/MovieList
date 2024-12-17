@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "+7nJVXkFMKbM0atjLr4ulsr2mk0mNKUgaR7NAyTNugI=",
+  "Source": "ML.API",
+  "BasePath": "_content/ML.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

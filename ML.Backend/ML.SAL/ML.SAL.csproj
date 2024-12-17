@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="RestSharp" Version="112.1.1-alpha.0.1" />
+    </ItemGroup>
+
 </Project>

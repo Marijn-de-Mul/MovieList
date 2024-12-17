@@ -37,12 +37,22 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "all"
+          "auditMode": "direct"
         }
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            },
+            "RestSharp": {
+              "target": "Package",
+              "version": "[112.1.1-alpha.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

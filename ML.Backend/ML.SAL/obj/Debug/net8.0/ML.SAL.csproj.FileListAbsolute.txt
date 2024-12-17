@@ -1,0 +1,13 @@
+E:\Personal\MovieList\ML.Backend\ML.SAL\bin\Debug\net8.0\ML.SAL.deps.json
+E:\Personal\MovieList\ML.Backend\ML.SAL\bin\Debug\net8.0\ML.SAL.dll
+E:\Personal\MovieList\ML.Backend\ML.SAL\bin\Debug\net8.0\ML.SAL.pdb
+E:\Personal\MovieList\ML.Backend\ML.SAL\obj\Debug\net8.0\ML.SAL.GeneratedMSBuildEditorConfig.editorconfig
+E:\Personal\MovieList\ML.Backend\ML.SAL\obj\Debug\net8.0\ML.SAL.AssemblyInfoInputs.cache
+E:\Personal\MovieList\ML.Backend\ML.SAL\obj\Debug\net8.0\ML.SAL.AssemblyInfo.cs
+E:\Personal\MovieList\ML.Backend\ML.SAL\obj\Debug\net8.0\ML.SAL.csproj.CoreCompileInputs.cache
+E:\Personal\MovieList\ML.Backend\ML.SAL\obj\Debug\net8.0\ML.SAL.sourcelink.json
+E:\Personal\MovieList\ML.Backend\ML.SAL\obj\Debug\net8.0\ML.SAL.dll
+E:\Personal\MovieList\ML.Backend\ML.SAL\obj\Debug\net8.0\refint\ML.SAL.dll
+E:\Personal\MovieList\ML.Backend\ML.SAL\obj\Debug\net8.0\ML.SAL.pdb
+E:\Personal\MovieList\ML.Backend\ML.SAL\obj\Debug\net8.0\ref\ML.SAL.dll
+E:\Personal\MovieList\ML.Backend\ML.SAL\obj\Debug\net8.0\ML.SAL.csproj.AssemblyReference.cache

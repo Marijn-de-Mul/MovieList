@@ -1,11 +1,97 @@
 {
   "version": 3,
   "targets": {
-    "net8.0": {}
+    "net8.0": {
+      "Newtonsoft.Json/13.0.3": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "RestSharp/112.1.1-alpha.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/RestSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/RestSharp.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Newtonsoft.Json/13.0.3": {
+      "sha512": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.3.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
+      ]
+    },
+    "RestSharp/112.1.1-alpha.0.1": {
+      "sha512": "JbaFbsbcfHfV/8QT9NX12+F8z2JtP++vAv33+hfcLd8M4POdh3gMnkrO0Qydh25Qaa4EayG0jlwPyHd07qYo5A==",
+      "type": "package",
+      "path": "restsharp/112.1.1-alpha.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net471/RestSharp.dll",
+        "lib/net471/RestSharp.xml",
+        "lib/net48/RestSharp.dll",
+        "lib/net48/RestSharp.xml",
+        "lib/net6.0/RestSharp.dll",
+        "lib/net6.0/RestSharp.xml",
+        "lib/net7.0/RestSharp.dll",
+        "lib/net7.0/RestSharp.xml",
+        "lib/net8.0/RestSharp.dll",
+        "lib/net8.0/RestSharp.xml",
+        "lib/netstandard2.0/RestSharp.dll",
+        "lib/netstandard2.0/RestSharp.xml",
+        "restsharp.112.1.1-alpha.0.1.nupkg.sha512",
+        "restsharp.nuspec",
+        "restsharp.png"
+      ]
+    }
+  },
   "projectFileDependencyGroups": {
-    "net8.0": []
+    "net8.0": [
+      "Newtonsoft.Json >= 13.0.3",
+      "RestSharp >= 112.1.1-alpha.0.1"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Marij\\.nuget\\packages\\": {}
@@ -43,12 +129,22 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
+        "auditMode": "direct"
       }
     },
     "frameworks": {
       "net8.0": {
         "targetAlias": "net8.0",
+        "dependencies": {
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.3, )"
+          },
+          "RestSharp": {
+            "target": "Package",
+            "version": "[112.1.1-alpha.0.1, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
