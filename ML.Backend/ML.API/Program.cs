@@ -10,7 +10,12 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Env.Load(); 
+var environment = builder.Environment;
+
+if (!environment.IsProduction() && !environment.IsStaging())
+{
+    Env.Load(); 
+}
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -18,10 +23,27 @@ builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod());
+    if (!environment.IsProduction())
+    {
+        options.AddPolicy("AllowSpecificOrigins", policy =>
+        {
+            policy.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); 
+        });
+    }
+    
+    if (environment.IsProduction())
+    {
+        options.AddPolicy("AllowSpecificOrigins", policy =>
+        {
+            policy.WithOrigins("http://movielist_frontend:3000", "https://movielist.marijndemul.nl")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); 
+        });
+    }
 });
 
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -44,6 +66,15 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "MovieList API", Version = "v1" });
 
     c.CustomSchemaIds(type => type.FullName);
+});
+
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(8079); 
+    // options.ListenAnyIP(8080, listenOptions =>
+    // {
+    //     listenOptions.UseHttps("/etc/ssl/certs/mycertificate.crt", "/etc/ssl/private/mycertificate.key");
+    // });
 });
 
 var app = builder.Build();

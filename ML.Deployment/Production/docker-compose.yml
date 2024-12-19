@@ -1,0 +1,53 @@
+services:
+  frontend:
+    image: marijndemul16/movielist.frontend:latest
+    container_name: movielist_frontend
+    ports:
+      - "3500:3000"
+    environment:
+      - NODE_ENV=production
+    restart: always
+    networks:
+      - production
+
+  backend:
+    image: marijndemul16/movielist.backend:latest
+    container_name: movielist_backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - DB_CONNECTION_STRING=${DB_CONNECTION_STRING}
+      - JWT_SECRET=${JWT_SECRET}
+      - TMDB_API_KEY=${TMDB_API_KEY}
+    volumes:
+      - backend_data:/app
+    ports:
+      - "8120:8079"
+      - "8300:8080"
+    restart: always
+    depends_on:
+      - postgres
+    networks:
+      - production
+
+  postgres:
+    image: postgres:17
+    container_name: movielist_postgres
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5450:5432"
+    restart: always
+    networks:
+      - production
+
+volumes:
+  postgres_data:
+  backend_data:
+
+networks:
+  production:
+    driver: bridge
