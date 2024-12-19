@@ -17,7 +17,8 @@ namespace ML.DAL.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    userId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,52 +58,40 @@ namespace ML.DAL.Migrations
                 name: "MovieDTO",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<int>(type: "integer", nullable: false),
                     TheMovieDbId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    MovieListId = table.Column<int>(type: "integer", nullable: true)
+                    Description = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MovieDTO", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MovieDTO_MovieLists_MovieListId",
-                        column: x => x.MovieListId,
+                        name: "FK_MovieDTO_MovieLists_Id",
+                        column: x => x.Id,
                         principalTable: "MovieLists",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "UserDTO",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<int>(type: "integer", nullable: false),
                     Username = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
-                    MovieListId = table.Column<int>(type: "integer", nullable: true)
+                    Password = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserDTO", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserDTO_MovieLists_MovieListId",
-                        column: x => x.MovieListId,
+                        name: "FK_UserDTO_MovieLists_Id",
+                        column: x => x.Id,
                         principalTable: "MovieLists",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MovieDTO_MovieListId",
-                table: "MovieDTO",
-                column: "MovieListId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserDTO_MovieListId",
-                table: "UserDTO",
-                column: "MovieListId");
         }
 
         /// <inheritdoc />

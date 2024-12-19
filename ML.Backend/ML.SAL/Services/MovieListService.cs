@@ -13,6 +13,17 @@ namespace ML.SAL.Services
         {
             _movieListRepository = movieListRepository;
         }
+        
+        public List<MovieListDTO> GetListsByUser(int userId)
+        {
+            return _movieListRepository.GetListsByUser(userId)
+                .Select(list => new MovieListDTO
+                {
+                    Id = list.Id,
+                    Name = list.Name,
+                    userId = list.userId
+                }).ToList();
+        }
 
         public void CreateList(MovieListDTO list)
         {

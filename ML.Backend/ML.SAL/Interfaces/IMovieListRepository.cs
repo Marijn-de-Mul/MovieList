@@ -5,6 +5,7 @@ namespace ML.DAL.Interfaces;
 
 public interface IMovieListRepository
 {
+    List<IMovieList> GetListsByUser(int userId);
     void CreateList(IMovieList list);
     void EditList(int id, IMovieList list);
     void DeleteList(int id);

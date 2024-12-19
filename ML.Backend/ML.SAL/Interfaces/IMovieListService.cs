@@ -4,6 +4,7 @@ namespace ML.SAL.Interfaces;
 
 public interface IMovieListService
 {
+    List<MovieListDTO> GetListsByUser(int userId);
     void CreateList(MovieListDTO list);
     void EditList(int id, MovieListDTO list);
     void DeleteList(int id);

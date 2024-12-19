@@ -16,12 +16,30 @@ namespace ML.DAL.Repositories
         {
             _context = context;
         }
+        
+        public List<IMovieList> GetListsByUser(int userId)
+        {
+            return _context.MovieLists.Where(list => list.userId == userId)
+                .Select(list => new MovieListDTO
+                {
+                    Id = list.Id,
+                    Name = list.Name,
+                    userId = list.userId,
+                    Movies = list.Movies.Select(m => new MovieDTO
+                    {
+                        Id = m.Id,
+                        Title = m.Title,
+                        Description = m.Description
+                    }).ToList()
+                }).ToList<IMovieList>();
+        }
 
         public void CreateList(IMovieList list)
         {
             var movieList = new MovieList
             {
                 Name = list.Name,
+                userId = list.userId, 
                 Movies = list.Movies.Select(m => new MovieDTO
                 {
                     Id = m.Id,

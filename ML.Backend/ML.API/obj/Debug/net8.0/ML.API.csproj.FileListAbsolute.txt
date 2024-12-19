@@ -145,3 +145,8 @@ E:\Personal\MovieList\ML.Backend\ML.API\bin\Debug\net8.0\zh-Hant\Microsoft.CodeA
 E:\Personal\MovieList\ML.Backend\ML.API\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 E:\Personal\MovieList\ML.Backend\ML.API\bin\Debug\net8.0\DotNetEnv.dll
 E:\Personal\MovieList\ML.Backend\ML.API\bin\Debug\net8.0\Sprache.dll
+E:\Personal\MovieList\ML.Backend\ML.API\bin\Debug\net8.0\Microsoft.IdentityModel.Abstractions.dll
+E:\Personal\MovieList\ML.Backend\ML.API\bin\Debug\net8.0\Microsoft.IdentityModel.JsonWebTokens.dll
+E:\Personal\MovieList\ML.Backend\ML.API\bin\Debug\net8.0\Microsoft.IdentityModel.Logging.dll
+E:\Personal\MovieList\ML.Backend\ML.API\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
+E:\Personal\MovieList\ML.Backend\ML.API\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll

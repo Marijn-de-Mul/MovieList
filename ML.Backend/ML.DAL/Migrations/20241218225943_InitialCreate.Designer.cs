@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ML.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241217205606_InitialCreate")]
+    [Migration("20241218225943_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -27,17 +27,11 @@ namespace ML.DAL.Migrations
             modelBuilder.Entity("ML.SAL.DTO.MovieDTO", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int?>("MovieListId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("TheMovieDbId")
                         .HasColumnType("integer");
@@ -48,20 +42,12 @@ namespace ML.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieListId");
-
                     b.ToTable("MovieDTO");
                 });
 
             modelBuilder.Entity("ML.SAL.DTO.UserDTO", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("MovieListId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Password")
@@ -73,8 +59,6 @@ namespace ML.DAL.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MovieListId");
 
                     b.ToTable("UserDTO");
                 });
@@ -115,6 +99,9 @@ namespace ML.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("userId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("MovieLists");
@@ -145,14 +132,18 @@ namespace ML.DAL.Migrations
                 {
                     b.HasOne("ML.SAL.Models.MovieList", null)
                         .WithMany("Movies")
-                        .HasForeignKey("MovieListId");
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ML.SAL.DTO.UserDTO", b =>
                 {
                     b.HasOne("ML.SAL.Models.MovieList", null)
                         .WithMany("SharedWith")
-                        .HasForeignKey("MovieListId");
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ML.SAL.Models.MovieList", b =>

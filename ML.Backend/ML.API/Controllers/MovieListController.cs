@@ -15,11 +15,30 @@ namespace ML.API.Controllers
             _movieListService = movieListService;
         }
 
+        [HttpGet]
+        public IActionResult GetListsByUser()
+        {
+            if (HttpContext.Items["UserId"] is int userId)
+            {
+                var lists = _movieListService.GetListsByUser(userId);
+                return Ok(lists);
+            }
+
+            return Unauthorized();
+        }
+
         [HttpPost]
         public IActionResult CreateList([FromBody] MovieListDTO list)
         {
-            _movieListService.CreateList(list);
-            return Ok();
+            if (HttpContext.Items["UserId"] is int userId)
+            {
+                list.userId = userId;
+                
+                _movieListService.CreateList(list);
+                return Ok();
+            }
+
+            return Unauthorized();
         }
 
         [HttpPut("{id}")]
