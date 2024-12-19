@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ML.SAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d45e7eebd0b7be68592adf4021b75d2b410ba8c3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+26dbcc5e31f562db02004ad30937a053e888a4b5")]
 [assembly: System.Reflection.AssemblyProductAttribute("ML.SAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ML.SAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
