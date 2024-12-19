@@ -49,7 +49,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: (.NET) Restore Backend Dependencies
-        run: dotnet restore ML.Backend/ML/Backend.sln
+        run: dotnet restore ML.Backend/ML.Backend.sln
 
       - name: (.NET) Run Unit Tests
         run: dotnet test --no-build --verbosity normal ML.Backend/ML.Backend.sln
