@@ -6,11 +6,11 @@ WORKDIR /src
 
 COPY ML.Backend.sln . 
 COPY ML.DAL/ML.DAL.csproj ML.DAL/
-COPY ML.BLL/ML.BLL.csproj ML.BLL/
+COPY ML.SAL/ML.SAL.csproj ML.SAL/
 COPY ML.API/ML.API.csproj ML.API/
 
 COPY ML.DAL/ ML.DAL/
-COPY ML.BLL/ ML.BLL/
+COPY ML.SAL/ ML.SAL/
 COPY ML.API/ ML.API/
 
 RUN dotnet restore "ML.Backend.sln"
