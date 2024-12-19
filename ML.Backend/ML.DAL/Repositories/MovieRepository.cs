@@ -1,5 +1,6 @@
 ﻿using ML.DAL.Data;
 using ML.DAL.Interfaces;
+using ML.SAL.DTO;
 using ML.SAL.Interfaces;
 using ML.SAL.Models;
 
@@ -16,7 +17,7 @@ namespace ML.DAL.Repositories
 
         public void Add(IMovie movie)
         {
-            var movieEntity = new Movie
+            var movieEntity = new MovieDTO
             {
                 Id = movie.Id,
                 TheMovieDbId = movie.TheMovieDbId,
@@ -42,7 +43,7 @@ namespace ML.DAL.Repositories
 
         public void Update(IMovie movie)
         {
-            var movieEntity = new Movie
+            var movieEntity = new MovieDTO
             {
                 Id = movie.Id,
                 Title = movie.Title,

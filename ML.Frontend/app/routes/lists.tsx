@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosInstance';
 
 export default function MovieLists() {
@@ -11,6 +11,7 @@ export default function MovieLists() {
   const [editingListName, setEditingListName] = useState('');
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareLink, setShareLink] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchLists();
@@ -69,6 +70,10 @@ export default function MovieLists() {
     }
   };
 
+  const viewMovieDetails = (movieId) => {
+    navigate(`/movie/${movieId}`);
+  };
+
   return (
     <div className="relative flex flex-col items-center p-4 bg-gray-100 dark:bg-gray-900 min-h-screen overflow-hidden">
       <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">Movie Lists</h1>
@@ -103,8 +108,14 @@ export default function MovieLists() {
               <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">Movies:</h3>
               <ul className="list-disc list-inside">
                 {list.movies && list.movies.length > 0 ? (
-                  list.movies.map((movie) => (
-                    <li key={movie.id} className="text-gray-600 dark:text-gray-400">{movie.title}</li>
+                  list.movies.map((movieItem) => (
+                    <li 
+                      key={movieItem.movie.id} 
+                      className="text-gray-600 dark:text-gray-400 cursor-pointer"
+                      onClick={() => viewMovieDetails(movieItem.movie.id)}
+                    >
+                      {movieItem.movie.title}
+                    </li>
                   ))
                 ) : (
                   <li className="text-gray-600 dark:text-gray-400">No movies in this list</li>

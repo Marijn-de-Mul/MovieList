@@ -10,7 +10,6 @@ export default function Search() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Function to search movies based on the query
   const searchMovies = async () => {
     setIsLoading(true);
     try {
@@ -23,7 +22,6 @@ export default function Search() {
     setIsLoading(false);
   };
 
-  // Function to fetch all movie lists
   const fetchLists = async () => {
     try {
       const response = await axiosInstance.get('/api/MovieList');
@@ -34,11 +32,9 @@ export default function Search() {
     }
   };
 
-  // Function to add a movie to a specific list
   const addMovieToList = async (movieId, listId) => {
     console.log(`addMovieToList called with Movie ID: ${movieId}, List ID: ${listId}`);
 
-    // Ensure movieId and listId are strings for consistent comparison
     const movie = results.find((movie) => String(movie.id) === String(movieId));
     if (!movie) {
       console.error('Movie not found:', movieId);
@@ -51,18 +47,51 @@ export default function Search() {
       return;
     }
 
-    // Check if the movie is already in the list to prevent duplicates
-    const isAlreadyAdded = list.movies.some((m) => String(m.id) === String(movieId));
+    const movies = list.movies || [];
+
+    const isAlreadyAdded = movies.some((m) => String(m.movie.id) === String(movieId));
     if (isAlreadyAdded) {
       alert('Movie is already in the selected list!');
       return;
     }
 
-    const updatedMovies = [...list.movies, movie];
+    const updatedMovies = [
+      ...movies.map((m) => ({
+        ...m,
+        movieList: {
+          id: list.id,
+          name: list.name,
+          userId: list.userId,
+          movies: [],
+          sharedWith: []
+        }
+      })),
+      {
+        movieListId: list.id,
+        movieList: {
+          id: list.id,
+          name: list.name,
+          userId: list.userId,
+          movies: [],
+          sharedWith: []
+        },
+        movieId: movie.id,
+        movie: {
+          id: movie.id,
+          theMovieDbId: movie.theMovieDbId || movie.id,
+          title: movie.title,
+          description: movie.description,
+        },
+      },
+    ];
     console.log('Updated movies for the list:', updatedMovies);
 
     try {
-      await axiosInstance.put(`/api/MovieList/${listId}`, { name: list.name, movies: updatedMovies });
+      await axiosInstance.put(`/api/MovieList/${listId}`, {
+        ...list,
+        movies: updatedMovies,
+        sharedWith: list.sharedWith || [] // Ensure sharedWith is included and is an array
+      });
       alert('Movie added to list!');
       setIsModalOpen(false);
     } catch (error) {
@@ -71,7 +100,6 @@ export default function Search() {
     }
   };
 
-  // Function to open the modal and select a movie
   const openModal = async (movieId) => {
     console.log(`Opening modal for Movie ID: ${movieId}`);
     setSelectedMovie(movieId);
@@ -79,7 +107,6 @@ export default function Search() {
     setIsModalOpen(true);
   };
 
-  // Function to close the modal
   const closeModal = () => {
     console.log('Closing modal');
     setIsModalOpen(false);
@@ -89,8 +116,7 @@ export default function Search() {
   return (
     <div className="relative flex flex-col items-center p-4 bg-gray-100 dark:bg-gray-900 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">Search Movies</h1>
-      
-      {/* Search Input and Button */}
+
       <div className={`w-full max-w-2xl space-y-4 ${isLoading ? 'opacity-50' : 'opacity-100'} transition-opacity duration-300`}>
         <div className="flex items-center space-x-2">
           <input
@@ -108,7 +134,6 @@ export default function Search() {
           </button>
         </div>
 
-        {/* Display Search Results */}
         {!isLoading && results.length > 0 && (
           <div className="mt-4 space-y-4">
             {results.map((movie) => (
@@ -130,7 +155,6 @@ export default function Search() {
         )}
       </div>
 
-      {/* Loading Indicator */}
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="flex flex-col items-center">
@@ -141,7 +165,6 @@ export default function Search() {
         </div>
       )}
 
-      {/* Modal to Select List */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -176,7 +199,6 @@ export default function Search() {
         </div>
       )}
 
-      {/* Back to Main Menu Button */}
       <Link
         to="/"
         className="fixed bottom-4 right-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"

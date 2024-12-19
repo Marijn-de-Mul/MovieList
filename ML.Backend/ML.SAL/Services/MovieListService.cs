@@ -13,7 +13,7 @@ namespace ML.SAL.Services
         {
             _movieListRepository = movieListRepository;
         }
-        
+
         public List<MovieListDTO> GetListsByUser(int userId)
         {
             return _movieListRepository.GetListsByUser(userId)
@@ -21,7 +21,28 @@ namespace ML.SAL.Services
                 {
                     Id = list.Id,
                     Name = list.Name,
-                    userId = list.userId
+                    userId = list.userId,
+                    Movies = list.Movies.Select(mlm => new MovieListMoviesDTO
+                    {
+                        MovieListId = mlm.MovieListId,
+                        MovieId = mlm.MovieId,
+                        Movie = new MovieDTO
+                        {
+                            Id = mlm.Movie.Id,
+                            Title = mlm.Movie.Title,
+                            Description = mlm.Movie.Description
+                        }
+                    }).ToList(),
+                    SharedWith = list.SharedWith.Select(mlsw => new MovieListSharedWithDTO
+                    {
+                        MovieListId = mlsw.MovieListId,
+                        UserId = mlsw.UserId,
+                        User = new UserDTO
+                        {
+                            Id = mlsw.User.Id,
+                            Username = mlsw.User.Username
+                        }
+                    }).ToList()
                 }).ToList();
         }
 

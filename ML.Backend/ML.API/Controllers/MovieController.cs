@@ -20,5 +20,16 @@ namespace ML.API.Controllers
             var movies = await _movieService.SearchMovies(query);
             return Ok(movies);
         }
+        
+        [HttpGet("details/{id}")]
+        public async Task<IActionResult> GetMovieDetails(int id)
+        {
+            var movie = _movieService.GetMovieById(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+            return Ok(movie);
+        }
     }
 }

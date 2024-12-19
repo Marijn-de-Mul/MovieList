@@ -8,7 +8,7 @@ namespace ML.SAL.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int userId { get; set; }
-        public List<MovieDTO> Movies { get; set; }
-        public List<UserDTO> SharedWith { get; set; }
+        public ICollection<MovieListMoviesDTO> Movies { get; set; }
+        public ICollection<MovieListSharedWithDTO> SharedWith { get; set; }
     }
 }

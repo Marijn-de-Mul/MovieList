@@ -2,7 +2,6 @@
 using ML.DAL.Data;
 using ML.SAL.Interfaces;
 using ML.SAL.Models;
-using System.Linq;
 using ML.DAL.Interfaces;
 using ML.SAL.DTO;
 
@@ -16,53 +15,111 @@ namespace ML.DAL.Repositories
         {
             _context = context;
         }
-        
+
         public List<IMovieList> GetListsByUser(int userId)
         {
-            return _context.MovieLists.Where(list => list.userId == userId)
+            return _context.MovieLists
+                .Where(list => list.userId == userId)
+                .Include(list => list.Movies)
+                .ThenInclude(mlm => mlm.Movie)
+                .Include(list => list.SharedWith)
+                .ThenInclude(mlsw => mlsw.User)
                 .Select(list => new MovieListDTO
                 {
                     Id = list.Id,
                     Name = list.Name,
                     userId = list.userId,
-                    Movies = list.Movies.Select(m => new MovieDTO
+                    Movies = list.Movies.Select(mlm => new MovieListMoviesDTO
                     {
-                        Id = m.Id,
-                        Title = m.Title,
-                        Description = m.Description
+                        MovieListId = list.Id,
+                        MovieId = mlm.Movie.Id,
+                        Movie = new MovieDTO
+                        {
+                            Id = mlm.Movie.Id,
+                            Title = mlm.Movie.Title,
+                            Description = mlm.Movie.Description
+                        }
+                    }).ToList(),
+                    SharedWith = list.SharedWith.Select(mlsw => new MovieListSharedWithDTO
+                    {
+                        MovieListId = list.Id,
+                        UserId = mlsw.User.Id,
+                        User = new UserDTO
+                        {
+                            Id = mlsw.User.Id,
+                            Username = mlsw.User.Username
+                        }
                     }).ToList()
                 }).ToList<IMovieList>();
         }
 
         public void CreateList(IMovieList list)
         {
-            var movieList = new MovieList
+            var movieList = new MovieListDTO
             {
                 Name = list.Name,
-                userId = list.userId, 
-                Movies = list.Movies.Select(m => new MovieDTO
-                {
-                    Id = m.Id,
-                    Title = m.Title,
-                    Description = m.Description
-                }).ToList()
+                userId = list.userId
             };
+
             _context.MovieLists.Add(movieList);
+            _context.SaveChanges();
+
+            foreach (var movie in list.Movies)
+            {
+                var movieListMovie = new MovieListMoviesDTO
+                {
+                    MovieListId = movieList.Id,
+                    MovieId = movie.MovieId
+                };
+                _context.MovieListMovies.Add(movieListMovie);
+            }
+
+            foreach (var user in list.SharedWith)
+            {
+                var movieListSharedWith = new MovieListSharedWithDTO
+                {
+                    MovieListId = movieList.Id,
+                    UserId = user.UserId
+                };
+                _context.MovieListSharedWith.Add(movieListSharedWith);
+            }
+
             _context.SaveChanges();
         }
 
         public void EditList(int id, IMovieList list)
         {
-            var existingList = _context.MovieLists.Find(id);
+            var existingList = _context.MovieLists
+                .Include(ml => ml.Movies)
+                .Include(ml => ml.SharedWith)
+                .FirstOrDefault(ml => ml.Id == id);
+
             if (existingList != null)
             {
                 existingList.Name = list.Name;
-                existingList.Movies = list.Movies.Select(m => new MovieDTO
+
+                _context.MovieListMovies.RemoveRange(_context.MovieListMovies.Where(mlm => mlm.MovieListId == existingList.Id));
+                foreach (var movie in list.Movies)
                 {
-                    Id = m.Id,
-                    Title = m.Title,
-                    Description = m.Description
-                }).ToList();
+                    var movieListMovie = new MovieListMoviesDTO
+                    {
+                        MovieListId = existingList.Id,
+                        MovieId = movie.MovieId
+                    };
+                    _context.MovieListMovies.Add(movieListMovie);
+                }
+
+                _context.MovieListSharedWith.RemoveRange(_context.MovieListSharedWith.Where(mlsw => mlsw.MovieListId == existingList.Id));
+                foreach (var user in list.SharedWith)
+                {
+                    var movieListSharedWith = new MovieListSharedWithDTO
+                    {
+                        MovieListId = existingList.Id,
+                        UserId = user.UserId
+                    };
+                    _context.MovieListSharedWith.Add(movieListSharedWith);
+                }
+
                 _context.SaveChanges();
             }
         }
@@ -82,10 +139,10 @@ namespace ML.DAL.Repositories
             var list = _context.MovieLists.Find(id);
             if (list != null)
             {
-                var userEntity = new UserDTO
+                var userEntity = new MovieListSharedWithDTO
                 {
-                    Id = user.Id,
-                    Username = user.Username
+                    UserId = user.Id,
+                    MovieListId = id
                 };
                 list.SharedWith.Add(userEntity);
                 _context.SaveChanges();
@@ -97,7 +154,7 @@ namespace ML.DAL.Repositories
             var list = _context.MovieLists.Find(id);
             if (list != null)
             {
-                var user = list.SharedWith.FirstOrDefault(u => u.Id == userId);
+                var user = list.SharedWith.FirstOrDefault(u => u.UserId == userId);
                 if (user != null)
                 {
                     list.SharedWith.Remove(user);

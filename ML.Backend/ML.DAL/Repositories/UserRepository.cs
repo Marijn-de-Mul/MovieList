@@ -1,5 +1,6 @@
 ﻿using ML.DAL.Data;
 using ML.DAL.Interfaces;
+using ML.SAL.DTO;
 using ML.SAL.Interfaces;
 using ML.SAL.Models;
 
@@ -16,7 +17,7 @@ namespace ML.DAL.Repositories
 
         public void Add(IUser user)
         {
-            var userEntity = new User
+            var userEntity = new UserDTO
             {
                 Id = user.Id,
                 Username = user.Username,
