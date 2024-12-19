@@ -3,8 +3,8 @@ import Cookies from 'js-cookie';
 
 const baseURL =
   process.env.NODE_ENV === 'production'
-    ? 'https://backend.movielist.marijndemul.nl/'
-    : 'https://localhost:8079';
+    ? 'http://movielist_backend:8079' // Production URL
+    : 'http://localhost:8079'; // Local network call for development
 
 const axiosInstance = axios.create({
   baseURL,
