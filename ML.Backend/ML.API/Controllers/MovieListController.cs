@@ -44,8 +44,13 @@ namespace ML.API.Controllers
         [HttpPut("{id}")]
         public IActionResult EditList(int id, [FromBody] MovieListDTO list)
         {
-            _movieListService.EditList(id, list);
-            return Ok();
+            if (HttpContext.Items["UserId"] is int UserId)
+            {
+                _movieListService.EditList(id, list, UserId);
+                return Ok();
+            }
+
+            return Unauthorized(); 
         }
 
         [HttpDelete("{id}")]

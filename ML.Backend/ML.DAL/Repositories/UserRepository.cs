@@ -31,5 +31,28 @@ namespace ML.DAL.Repositories
         {
             return _context.Users.FirstOrDefault(u => u.Username == username);
         }
+        
+        public IEnumerable<IUser> Search(string query)
+        {
+            return _context.Users
+                .Where(u => u.Username.Contains(query))
+                .ToList();
+        }
+        
+        public async Task<UserDTO> GetById(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserDTO
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Password = user.Password
+            };
+        }
     }
 }

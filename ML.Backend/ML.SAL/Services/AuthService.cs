@@ -45,5 +45,32 @@ namespace ML.SAL.Services
             }
             return null;
         }
+        
+        public async Task<List<UserDTO>> SearchUsers(string query)
+        {
+            var users = _userRepository.Search(query)
+                .Select(u => new UserDTO
+                {
+                    Id = u.Id,
+                    Username = u.Username
+                }).ToList();
+
+            return await Task.FromResult(users);
+        }
+        
+        public async Task<UserDTO> GetUserById(int userId)
+        {
+            var user = await _userRepository.GetById(userId);
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserDTO
+            {
+                Id = user.Id,
+                Username = user.Username,
+            };
+        }
     }
 }

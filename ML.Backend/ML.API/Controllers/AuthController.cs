@@ -32,5 +32,27 @@ namespace ML.API.Controllers
             }
             return Ok(new { Token = token });
         }
+        
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchUsers([FromQuery] string query)
+        {
+            var users = await _authService.SearchUsers(query);
+            return Ok(users);
+        }
+        
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            if (HttpContext.Items["UserId"] is int userId)
+            {
+                var user = await _authService.GetUserById(userId);
+                if (user != null)
+                {
+                    return Ok(new { UserId = user.Id, Username = user.Username });
+                }
+            }
+
+            return Unauthorized();
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace ML.DAL.Repositories
 
         public List<IMovieList> GetListsByUser(int userId)
         {
-            return _context.MovieLists
+            var userLists = _context.MovieLists
                 .Where(list => list.userId == userId)
                 .Include(list => list.Movies)
                 .ThenInclude(mlm => mlm.Movie)
@@ -51,6 +51,42 @@ namespace ML.DAL.Repositories
                         }
                     }).ToList()
                 }).ToList<IMovieList>();
+
+            var sharedLists = _context.MovieLists
+                .Where(list => list.SharedWith.Any(mlsw => mlsw.UserId == userId))
+                .Include(list => list.Movies)
+                .ThenInclude(mlm => mlm.Movie)
+                .Include(list => list.SharedWith)
+                .ThenInclude(mlsw => mlsw.User)
+                .Select(list => new MovieListDTO
+                {
+                    Id = list.Id,
+                    Name = list.Name,
+                    userId = list.userId,
+                    Movies = list.Movies.Select(mlm => new MovieListMoviesDTO
+                    {
+                        MovieListId = list.Id,
+                        MovieId = mlm.Movie.Id,
+                        Movie = new MovieDTO
+                        {
+                            Id = mlm.Movie.Id,
+                            Title = mlm.Movie.Title,
+                            Description = mlm.Movie.Description
+                        }
+                    }).ToList(),
+                    SharedWith = list.SharedWith.Select(mlsw => new MovieListSharedWithDTO
+                    {
+                        MovieListId = list.Id,
+                        UserId = mlsw.User.Id,
+                        User = new UserDTO
+                        {
+                            Id = mlsw.User.Id,
+                            Username = mlsw.User.Username
+                        }
+                    }).ToList()
+                }).ToList<IMovieList>();
+
+            return userLists.Concat(sharedLists).ToList();
         }
 
         public void CreateList(IMovieList list)
@@ -136,17 +172,32 @@ namespace ML.DAL.Repositories
 
         public void ShareList(int id, IUser user)
         {
-            var list = _context.MovieLists.Find(id);
-            if (list != null)
+            if (user == null)
             {
-                var userEntity = new MovieListSharedWithDTO
-                {
-                    UserId = user.Id,
-                    MovieListId = id
-                };
-                list.SharedWith.Add(userEntity);
-                _context.SaveChanges();
+                throw new ArgumentNullException(nameof(user));
             }
+
+            var movieList = _context.MovieLists.Include(ml => ml.SharedWith).FirstOrDefault(ml => ml.Id == id);
+            if (movieList == null)
+            {
+                throw new InvalidOperationException("Movie list not found.");
+            }
+
+            var userEntity = _context.Users.FirstOrDefault(u => u.Username == user.Username);
+            if (userEntity == null)
+            {
+                throw new InvalidOperationException($"User not found. Username: {user.Username}");
+            }
+
+            _context.Attach(userEntity);
+
+            movieList.SharedWith.Add(new MovieListSharedWithDTO
+            {
+                MovieListId = id,
+                UserId = userEntity.Id
+            });
+
+            _context.SaveChanges();
         }
 
         public void RemoveUserFromList(int id, int userId)

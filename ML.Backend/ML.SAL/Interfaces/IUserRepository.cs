@@ -7,4 +7,6 @@ public interface IUserRepository
 {
     void Add(IUser user);
     IUser GetByUsername(string username);
+    Task<UserDTO> GetById(int userId);
+    IEnumerable<IUser> Search(string query);
 }

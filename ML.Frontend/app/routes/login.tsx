@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axiosInstance from '../axiosInstance';
 import Cookies from 'js-cookie';
 
@@ -7,13 +7,20 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axiosInstance.post('/api/Auth/login', { username, password });
       Cookies.set('auth-token', response.data.token);
-      navigate('/');
+
+      const redirectUrl = new URLSearchParams(location.search).get('redirect');
+      if (redirectUrl) {
+        navigate(redirectUrl);
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       alert('Login failed');
     }

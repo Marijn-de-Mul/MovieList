@@ -51,8 +51,28 @@ namespace ML.SAL.Services
             _movieListRepository.CreateList(list);
         }
 
-        public void EditList(int id, MovieListDTO list)
+
+        public void EditList(int id, MovieListDTO list, int userId)
         {
+            var existingList = _movieListRepository.GetListsByUser(userId)
+                .FirstOrDefault(l => l.Id == id);
+
+            if (existingList == null)
+            {
+                throw new InvalidOperationException("Movie list not found.");
+            }
+
+            if (existingList.userId != userId && !existingList.SharedWith.Any(u => u.UserId == userId))
+            {
+                throw new UnauthorizedAccessException("User does not have permission to edit this list.");
+            }
+
+            foreach (var sharedWith in list.SharedWith)
+            {
+                sharedWith.MovieList = list;
+                sharedWith.User.Password = "defaultPassword"; 
+            }
+
             _movieListRepository.EditList(id, list);
         }
 
@@ -63,7 +83,18 @@ namespace ML.SAL.Services
 
         public void ShareList(int id, UserDTO user)
         {
-            _movieListRepository.ShareList(id, user);
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            var userEntity = new UserDTO
+            {
+                Id = user.Id,
+                Username = user.Username
+            };
+
+            _movieListRepository.ShareList(id, userEntity);
         }
 
         public void RemoveUserFromList(int id, int userId)
