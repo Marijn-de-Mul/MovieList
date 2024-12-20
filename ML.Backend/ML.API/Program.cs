@@ -38,7 +38,7 @@ builder.Services.AddCors(options =>
     {
         options.AddPolicy("AllowSpecificOrigins", policy =>
         {
-            policy.WithOrigins("http://movielist_frontend:3000", "https://movielist.marijndemul.nl")
+            policy.WithOrigins("http://movielist_frontend:3000", "http://movielist_frontend:3500", "https://movielist.marijndemul.nl")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials(); 
