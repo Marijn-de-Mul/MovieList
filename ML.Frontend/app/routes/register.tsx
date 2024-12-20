@@ -37,6 +37,13 @@ const Register = () => {
       <div className="w-full max-w-sm p-6 space-y-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
         <div className="flex flex-col items-center gap-4">
           <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Register</h2>
+          <div className="h-20 w-20">
+            <img
+              src="/logo.png"
+              alt="MovieList"
+              className="block w-full"
+            />
+          </div>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleRegister}>
           <div className="rounded-md shadow-sm space-y-4">
@@ -78,6 +85,14 @@ const Register = () => {
             </button>
           </div>
         </form>
+        <div className="text-sm text-center">
+          <p className="text-gray-600 dark:text-gray-400">
+            Already have an account?{' '}
+            <a href="/login" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
+              Login
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

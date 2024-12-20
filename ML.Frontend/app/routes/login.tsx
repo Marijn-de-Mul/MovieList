@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from '@remix-run/react';
 import axiosInstance from '../axiosInstance';
 import Cookies from 'js-cookie';
 
@@ -39,9 +39,9 @@ export default function Login() {
           <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Login</h2>
           <div className="h-20 w-20">
             <img
-              src="/public/logo.png"
+              src="/logo.png"
               alt="MovieList"
-              className="block w-full dark:hidden"
+              className="block w-full"
             />
           </div>
         </div>

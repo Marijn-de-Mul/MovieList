@@ -19,9 +19,9 @@ export default function Index() {
             </h1>
             <div className="h-36 w-36">
               <img
-                src="/public/logo.png"
+                src="/logo.png"
                 alt="MovieList"
-                className="block w-full dark:hidden"
+                className="block w-full"
               />
             </div>
           </header>
@@ -38,8 +38,8 @@ export default function Index() {
                   ) : (
                     <a
                       className={`block text-lg px-6 py-3 rounded-xl transition transform hover:scale-105 shadow-md ${text === 'Logout'
-                          ? 'text-red-600 hover:bg-red-100 dark:hover:bg-red-900 dark:text-red-400'
-                          : 'text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900 dark:text-blue-400'
+                        ? 'text-red-600 hover:bg-red-100 dark:hover:bg-red-900 dark:text-red-400'
+                        : 'text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900 dark:text-blue-400'
                         }`}
                       href={href}
                     >

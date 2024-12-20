@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@remix-run/react';
 import Cookies from 'js-cookie';
 
 export default function Logout() {
@@ -7,7 +7,9 @@ export default function Logout() {
 
   useEffect(() => {
     Cookies.remove('auth-token');
-    navigate('/login');
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 100); 
   }, [navigate]);
 
   return (
