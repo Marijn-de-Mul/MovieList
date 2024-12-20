@@ -24,8 +24,16 @@ public class AuthMiddleware
     public async Task Invoke(HttpContext context)
     {
         var path = context.Request.Path.Value.ToLower();
-        if (context.Request.Method == HttpMethods.Options ||
-            path.Contains("/api/auth/login") ||
+        if (context.Request.Method == HttpMethods.Options)
+        {
+            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            context.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            context.Response.Headers.Add("Access-Control-Allow-Headers", "Authorization, Content-Type");
+            context.Response.StatusCode = StatusCodes.Status204NoContent;
+            return;
+        }
+
+        if (path.Contains("/api/auth/login") ||
             path.Contains("/api/auth/register") ||
             path.Contains("/swagger"))
         {
