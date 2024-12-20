@@ -14,7 +14,15 @@ export default function Search() {
   const searchMovies = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get(`/api/Movie/search?query=${query}`);
+      const response = await axiosInstance.post('/proxy', {
+        endpoint: '/api/Movie/search',
+        method: 'GET',
+        authorization: Cookies.get('auth-token'),
+        body: null,
+        contentType: 'application/json',
+      }, {
+        params: { query }
+      });
       setResults(response.data);
       console.log('Search results:', response.data);
     } catch (error) {
@@ -25,7 +33,13 @@ export default function Search() {
 
   const fetchLists = async () => {
     try {
-      const response = await axiosInstance.get('/api/MovieList');
+      const response = await axiosInstance.post('/proxy', {
+        endpoint: '/api/MovieList',
+        method: 'GET',
+        authorization: Cookies.get('auth-token'),
+        body: null,
+        contentType: 'application/json',
+      });
       setLists(response.data);
       console.log('Fetched lists:', response.data);
     } catch (error) {
@@ -88,10 +102,16 @@ export default function Search() {
     console.log('Updated movies for the list:', updatedMovies);
 
     try {
-      await axiosInstance.put(`/api/MovieList/${listId}`, {
-        ...list,
-        movies: updatedMovies,
-        sharedWith: list.sharedWith || []
+      await axiosInstance.post('/proxy', {
+        endpoint: `/api/MovieList/${listId}`,
+        method: 'PUT',
+        authorization: Cookies.get('auth-token'),
+        body: {
+          ...list,
+          movies: updatedMovies,
+          sharedWith: list.sharedWith || []
+        },
+        contentType: 'application/json',
       });
       alert('Movie added to list!');
       setIsModalOpen(false);

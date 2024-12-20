@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosInstance';
 import ProtectedRoute from './components/ProtectedRoute';
+import Cookies from 'js-cookie';
 
 export default function MovieLists() {
   const [lists, setLists] = useState([]);
@@ -20,18 +21,38 @@ export default function MovieLists() {
   }, []);
 
   const fetchLists = async () => {
-    const response = await axiosInstance.get('/api/MovieList');
-    setLists(response.data);
+    try {
+      const response = await axiosInstance.post('/proxy', {
+        endpoint: '/api/MovieList',
+        method: 'GET',
+        authorization: Cookies.get('auth-token'),
+        body: null,
+        contentType: 'application/json',
+      });
+      setLists(response.data);
+    } catch (error) {
+      console.error('Error fetching lists:', error);
+    }
   };
 
   const createList = async () => {
-    await axiosInstance.post('/api/MovieList', {
-      name: newListName,
-      sharedWith: [],
-      movies: []
-    });
-    setNewListName('');
-    fetchLists();
+    try {
+      await axiosInstance.post('/proxy', {
+        endpoint: '/api/MovieList',
+        method: 'POST',
+        authorization: Cookies.get('auth-token'),
+        body: {
+          name: newListName,
+          sharedWith: [],
+          movies: []
+        },
+        contentType: 'application/json',
+      });
+      setNewListName('');
+      fetchLists();
+    } catch (error) {
+      console.error('Error creating list:', error);
+    }
   };
 
   const editList = async (id, name) => {
@@ -52,22 +73,48 @@ export default function MovieLists() {
       }
     }));
 
-    await axiosInstance.put(`/api/MovieList/${id}`, {
-      ...list,
-      name,
-      movies: updatedMovies,
-    });
-    fetchLists();
+    try {
+      await axiosInstance.post('/proxy', {
+        endpoint: `/api/MovieList/${id}`,
+        method: 'PUT',
+        authorization: Cookies.get('auth-token'),
+        body: {
+          ...list,
+          name,
+          movies: updatedMovies,
+        },
+        contentType: 'application/json',
+      });
+      fetchLists();
+    } catch (error) {
+      console.error('Error editing list:', error);
+    }
   };
 
   const deleteList = async (id) => {
-    await axiosInstance.delete(`/api/MovieList/${id}`);
-    fetchLists();
+    try {
+      await axiosInstance.post('/proxy', {
+        endpoint: `/api/MovieList/${id}`,
+        method: 'DELETE',
+        authorization: Cookies.get('auth-token'),
+        body: null,
+        contentType: 'application/json',
+      });
+      fetchLists();
+    } catch (error) {
+      console.error('Error deleting list:', error);
+    }
   };
 
   const shareList = async (id, user) => {
     try {
-      await axiosInstance.post(`/api/MovieList/${id}/share`, user);
+      await axiosInstance.post('/proxy', {
+        endpoint: `/api/MovieList/${id}/share`,
+        method: 'POST',
+        authorization: Cookies.get('auth-token'),
+        body: user,
+        contentType: 'application/json',
+      });
       setShareUser('');
       setMatchingUsers([]);
       alert('User added to the list!');
@@ -106,8 +153,18 @@ export default function MovieLists() {
 
   const searchUsers = async (query) => {
     if (query.length > 0) {
-      const response = await axiosInstance.get(`/api/Auth/search?query=${query}`);
-      setMatchingUsers(response.data);
+      try {
+        const response = await axiosInstance.post('/proxy', {
+          endpoint: `/api/Auth/search?query=${query}`,
+          method: 'GET',
+          authorization: Cookies.get('auth-token'),
+          body: null,
+          contentType: 'application/json',
+        });
+        setMatchingUsers(response.data);
+      } catch (error) {
+        console.error('Error searching users:', error);
+      }
     } else {
       setMatchingUsers([]);
     }

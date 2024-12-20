@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from '@remix-run/react';
 import axiosInstance from '../axiosInstance';
 import ProtectedRoute from './components/ProtectedRoute';
+import Cookies from 'js-cookie';
 
 export default function MovieDetails() {
   const { movieId } = useParams();
@@ -11,7 +12,13 @@ export default function MovieDetails() {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await axiosInstance.get(`/api/Movie/details/${movieId}`);
+        const response = await axiosInstance.post('/proxy', {
+          endpoint: `/api/Movie/details/${movieId}`,
+          method: 'GET',
+          authorization: Cookies.get('auth-token'),
+          body: null,
+          contentType: 'application/json',
+        });
         setMovie(response.data);
         console.log('Fetched movie details:', response.data);
       } catch (error) {

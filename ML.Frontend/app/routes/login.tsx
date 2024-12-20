@@ -12,7 +12,13 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post('/api/Auth/login', { username, password });
+      const response = await axiosInstance.post('/proxy', {
+        endpoint: '/api/Auth/login',
+        method: 'POST',
+        authorization: '',
+        body: { username, password },
+        contentType: 'application/json',
+      });
       Cookies.set('auth-token', response.data.token);
 
       const redirectUrl = new URLSearchParams(location.search).get('redirect');
