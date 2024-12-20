@@ -22,7 +22,7 @@ export default function MovieLists() {
 
   const fetchLists = async () => {
     try {
-      const response = await axiosInstance.post('/proxy', {
+      const response = await axiosInstance.post('', {
         endpoint: '/api/MovieList',
         method: 'GET',
         authorization: Cookies.get('auth-token'),
@@ -37,7 +37,7 @@ export default function MovieLists() {
 
   const createList = async () => {
     try {
-      await axiosInstance.post('/proxy', {
+      await axiosInstance.post('', {
         endpoint: '/api/MovieList',
         method: 'POST',
         authorization: Cookies.get('auth-token'),
@@ -74,7 +74,7 @@ export default function MovieLists() {
     }));
 
     try {
-      await axiosInstance.post('/proxy', {
+      await axiosInstance.post('', {
         endpoint: `/api/MovieList/${id}`,
         method: 'PUT',
         authorization: Cookies.get('auth-token'),
@@ -93,7 +93,7 @@ export default function MovieLists() {
 
   const deleteList = async (id) => {
     try {
-      await axiosInstance.post('/proxy', {
+      await axiosInstance.post('', {
         endpoint: `/api/MovieList/${id}`,
         method: 'DELETE',
         authorization: Cookies.get('auth-token'),
@@ -108,7 +108,7 @@ export default function MovieLists() {
 
   const shareList = async (id, user) => {
     try {
-      await axiosInstance.post('/proxy', {
+      await axiosInstance.post('', {
         endpoint: `/api/MovieList/${id}/share`,
         method: 'POST',
         authorization: Cookies.get('auth-token'),
@@ -154,7 +154,7 @@ export default function MovieLists() {
   const searchUsers = async (query) => {
     if (query.length > 0) {
       try {
-        const response = await axiosInstance.post('/proxy', {
+        const response = await axiosInstance.post('', {
           endpoint: `/api/Auth/search?query=${query}`,
           method: 'GET',
           authorization: Cookies.get('auth-token'),

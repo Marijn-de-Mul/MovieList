@@ -14,7 +14,7 @@ export default function Search() {
   const searchMovies = async () => {
     setIsLoading(true);
     try {
-      const response = await axiosInstance.post('/proxy', {
+      const response = await axiosInstance.post('', {
         endpoint: '/api/Movie/search',
         method: 'GET',
         authorization: Cookies.get('auth-token'),
@@ -33,7 +33,7 @@ export default function Search() {
 
   const fetchLists = async () => {
     try {
-      const response = await axiosInstance.post('/proxy', {
+      const response = await axiosInstance.post('', {
         endpoint: '/api/MovieList',
         method: 'GET',
         authorization: Cookies.get('auth-token'),
@@ -102,7 +102,7 @@ export default function Search() {
     console.log('Updated movies for the list:', updatedMovies);
 
     try {
-      await axiosInstance.post('/proxy', {
+      await axiosInstance.post('', {
         endpoint: `/api/MovieList/${listId}`,
         method: 'PUT',
         authorization: Cookies.get('auth-token'),

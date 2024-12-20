@@ -12,7 +12,7 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post('/proxy', {
+      const response = await axiosInstance.post('', {
         endpoint: '/api/Auth/login',
         method: 'POST',
         authorization: '',

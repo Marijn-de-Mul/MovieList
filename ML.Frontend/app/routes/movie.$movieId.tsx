@@ -12,7 +12,7 @@ export default function MovieDetails() {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await axiosInstance.post('/proxy', {
+        const response = await axiosInstance.post('', {
           endpoint: `/api/Movie/details/${movieId}`,
           method: 'GET',
           authorization: Cookies.get('auth-token'),
