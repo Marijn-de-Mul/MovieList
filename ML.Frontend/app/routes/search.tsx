@@ -101,7 +101,7 @@ export default function Search() {
     console.log('Updated movies for the list:', updatedMovies);
 
     try {
-      await axiosInstance.post('/proxy', {
+      await axiosInstance.post('', {
         endpoint: `/api/MovieList/${listId}`,
         method: 'PUT',
         authorization: Cookies.get('auth-token'),
