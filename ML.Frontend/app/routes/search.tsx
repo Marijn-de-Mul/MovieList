@@ -32,7 +32,7 @@ export default function Search() {
 
   const fetchLists = async () => {
     try {
-      const response = await axiosInstance.post('/proxy', {
+      const response = await axiosInstance.post('', {
         endpoint: '/api/MovieList',
         method: 'GET',
         authorization: Cookies.get('auth-token'),
