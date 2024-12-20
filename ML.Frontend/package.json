@@ -14,9 +14,11 @@
     "@remix-run/node": "^2.15.1",
     "@remix-run/react": "^2.15.1",
     "@remix-run/serve": "^2.15.1",
+    "@types/node-fetch": "^2.6.12",
     "axios": "^1.7.9",
     "isbot": "^4.1.0",
     "js-cookie": "^3.0.5",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

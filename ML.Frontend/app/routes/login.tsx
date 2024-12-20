@@ -33,14 +33,9 @@ export default function Login() {
           <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Login</h2>
           <div className="h-20 w-20">
             <img
-              src="/logo-light.png"
+              src="/public/logo.png"
               alt="MovieList"
               className="block w-full dark:hidden"
-            />
-            <img
-              src="/logo-dark.png"
-              alt="MovieList"
-              className="hidden w-full dark:block"
             />
           </div>
         </div>

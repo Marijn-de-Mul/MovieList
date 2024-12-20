@@ -19,14 +19,9 @@ export default function Index() {
             </h1>
             <div className="h-36 w-36">
               <img
-                src="/logo-light.png"
+                src="/public/logo.png"
                 alt="MovieList"
                 className="block w-full dark:hidden"
-              />
-              <img
-                src="/logo-dark.png"
-                alt="MovieList"
-                className="hidden w-full dark:block"
               />
             </div>
           </header>

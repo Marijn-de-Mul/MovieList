@@ -1,10 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const baseURL =
-  process.env.NODE_ENV === 'production'
-    ? 'http://movielist_backend:8079' 
-    : 'http://localhost:8079'; 
+const baseURL = '/proxy'; 
 
 const axiosInstance = axios.create({
   baseURL,

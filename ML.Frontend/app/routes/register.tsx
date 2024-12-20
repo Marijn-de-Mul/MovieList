@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@remix-run/react';
 import axiosInstance from '../axiosInstance';
 import Cookies from 'js-cookie';
 
-export default function Register() {
+const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -11,8 +11,20 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axiosInstance.post('/api/Auth/register', { username, password });
-      const response = await axiosInstance.post('/api/Auth/login', { username, password });
+      await axiosInstance.post('', {
+        endpoint: '/api/Auth/register',
+        method: 'POST',
+        authorization: '',
+        body: { username, password },
+        contentType: 'application/json',
+      });
+      const response = await axiosInstance.post('', {
+        endpoint: '/api/Auth/login',
+        method: 'POST',
+        authorization: '',
+        body: { username, password },
+        contentType: 'application/json',
+      });
       Cookies.set('auth-token', response.data.token);
       navigate('/');
     } catch (error) {
@@ -25,18 +37,6 @@ export default function Register() {
       <div className="w-full max-w-sm p-6 space-y-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
         <div className="flex flex-col items-center gap-4">
           <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-100">Register</h2>
-          <div className="h-20 w-20">
-            <img
-              src="/logo-light.png"
-              alt="MovieList"
-              className="block w-full dark:hidden"
-            />
-            <img
-              src="/logo-dark.png"
-              alt="MovieList"
-              className="hidden w-full dark:block"
-            />
-          </div>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleRegister}>
           <div className="rounded-md shadow-sm space-y-4">
@@ -60,7 +60,7 @@ export default function Register() {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="new-password"
+                autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -78,15 +78,9 @@ export default function Register() {
             </button>
           </div>
         </form>
-        <div className="text-sm text-center">
-          <p className="text-gray-600 dark:text-gray-400">
-            Already have an account?{' '}
-            <a href="/login" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
-              Login
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Register;
