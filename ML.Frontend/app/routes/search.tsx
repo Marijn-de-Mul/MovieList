@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axiosInstance from '../axiosInstance';
 import ProtectedRoute from './components/ProtectedRoute';
+import Cookies from 'js-cookie';
 
 export default function Search() {
   const [query, setQuery] = useState('');
@@ -15,13 +16,11 @@ export default function Search() {
     setIsLoading(true);
     try {
       const response = await axiosInstance.post('', {
-        endpoint: '/api/Movie/search',
+        endpoint: `/api/Movie/search?query=${query}`,
         method: 'GET',
         authorization: Cookies.get('auth-token'),
         body: null,
         contentType: 'application/json',
-      }, {
-        params: { query }
       });
       setResults(response.data);
       console.log('Search results:', response.data);
@@ -33,7 +32,7 @@ export default function Search() {
 
   const fetchLists = async () => {
     try {
-      const response = await axiosInstance.post('', {
+      const response = await axiosInstance.post('/proxy', {
         endpoint: '/api/MovieList',
         method: 'GET',
         authorization: Cookies.get('auth-token'),
@@ -102,7 +101,7 @@ export default function Search() {
     console.log('Updated movies for the list:', updatedMovies);
 
     try {
-      await axiosInstance.post('', {
+      await axiosInstance.post('/proxy', {
         endpoint: `/api/MovieList/${listId}`,
         method: 'PUT',
         authorization: Cookies.get('auth-token'),
