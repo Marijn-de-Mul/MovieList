@@ -162,10 +162,16 @@ namespace ML.DAL.Repositories
 
         public void DeleteList(int id)
         {
-            var list = _context.MovieLists.Find(id);
-            if (list != null)
+            var movieList = _context.MovieLists
+                .Include(ml => ml.Movies)
+                .Include(ml => ml.SharedWith)
+                .FirstOrDefault(ml => ml.Id == id);
+
+            if (movieList != null)
             {
-                _context.MovieLists.Remove(list);
+                _context.MovieListMovies.RemoveRange(movieList.Movies);
+                _context.MovieListSharedWith.RemoveRange(movieList.SharedWith);
+                _context.MovieLists.Remove(movieList);
                 _context.SaveChanges();
             }
         }
@@ -202,13 +208,16 @@ namespace ML.DAL.Repositories
 
         public void RemoveUserFromList(int id, int userId)
         {
-            var list = _context.MovieLists.Find(id);
-            if (list != null)
+            var movieList = _context.MovieLists
+                .Include(ml => ml.SharedWith)
+                .FirstOrDefault(ml => ml.Id == id);
+
+            if (movieList != null && movieList.SharedWith != null)
             {
-                var user = list.SharedWith.FirstOrDefault(u => u.UserId == userId);
-                if (user != null)
+                var userToRemove = movieList.SharedWith.FirstOrDefault(sw => sw.UserId == userId);
+                if (userToRemove != null)
                 {
-                    list.SharedWith.Remove(user);
+                    _context.MovieListSharedWith.Remove(userToRemove);
                     _context.SaveChanges();
                 }
             }
