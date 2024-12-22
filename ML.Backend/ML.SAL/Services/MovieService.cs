@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using RestSharp;
 using Newtonsoft.Json.Linq;
 using ML.DAL.Interfaces;
@@ -39,148 +40,166 @@ namespace ML.SAL.Services
             };
         }
 
-    public async Task<List<MovieDTO>> SearchMovies(string query)
-    {
-        var movies = _movieRepository.Search(query).Select(m => new MovieDTO
+        public async Task<List<MovieDTO>> SearchMovies(string query)
         {
-            Id = m.Id,
-            TheMovieDbId = m.TheMovieDbId,
-            Title = m.Title,
-            Description = m.Description
-        }).ToList();
-    
-        if (movies.Count < 10)
-        {
-            Console.WriteLine("Fetching movies and TV shows from TMDB API...");
-    
-            var client = new RestClient("https://api.themoviedb.org/3/");
-            int maxPages = 25; // Set a maximum page limit to avoid infinite loops
-    
-            // Fetch all pages of movies
-            int page = 1;
-            bool morePages = true;
-            while (morePages && page <= maxPages)
+            var movies = _movieRepository.Search(query).Select(m => new MovieDTO
             {
-                var movieRequest = new RestRequest("search/movie", Method.Get);
-                movieRequest.AddHeader("Authorization", $"Bearer {_tmdbApiKey}");
-                movieRequest.AddParameter("query", query);
-                movieRequest.AddParameter("language", "nl,en"); // Include Dutch and English languages
-                movieRequest.AddParameter("sort_by", "popularity.desc");
-                movieRequest.AddParameter("region", "NL"); // Base top results on NL
-                movieRequest.AddParameter("page", page);
-    
-                var movieResponse = await client.ExecuteAsync(movieRequest);
-    
-                if (movieResponse.IsSuccessful)
+                Id = m.Id,
+                TheMovieDbId = m.TheMovieDbId,
+                Title = m.Title,
+                Description = m.Description,
+                BannerUrl = m.BannerUrl // Include BannerUrl
+            }).ToList();
+
+            var uniqueMovies =
+                new HashSet<(string Title, string Description)>(movies.Select(m => (m.Title, m.Description)));
+
+            if (movies.Count < 10)
+            {
+                Console.WriteLine("Fetching movies and TV shows from TMDB API...");
+
+                var client = new RestClient("https://api.themoviedb.org/3/");
+                int maxPages = 1000;
+                string region = new RegionInfo(CultureInfo.CurrentCulture.Name).TwoLetterISORegionName;
+
+                int page = 1;
+                bool morePages = true;
+                while (morePages && page <= maxPages)
                 {
-                    var movieContent = JObject.Parse(movieResponse.Content);
-    
-                    foreach (var result in movieContent["results"])
+                    var movieRequest = new RestRequest("search/movie", Method.Get);
+                    movieRequest.AddHeader("Authorization", $"Bearer {_tmdbApiKey}");
+                    movieRequest.AddParameter("query", query);
+                    movieRequest.AddParameter("region", region);
+                    movieRequest.AddParameter("sort_by", "popularity.desc");
+                    movieRequest.AddParameter("page", page);
+
+                    var movieResponse = await client.ExecuteAsync(movieRequest);
+
+                    if (movieResponse.IsSuccessful)
                     {
-                        int tmdbId = (int)result["id"];
-                        if (!_movieRepository.Search(tmdbId.ToString()).Any())
+                        var movieContent = JObject.Parse(movieResponse.Content);
+
+                        foreach (var result in movieContent["results"])
                         {
-                            var movie = new MovieDTO
+                            string title = (string)result["title"];
+                            string description = (string)result["overview"];
+                            string bannerUrl = result["poster_path"] != null
+                                ? $"https://image.tmdb.org/t/p/w500{result["poster_path"]}"
+                                : null;
+
+                            if (!uniqueMovies.Contains((title, description)))
                             {
-                                Id = 0,
-                                TheMovieDbId = tmdbId,
-                                Title = (string)result["title"],
-                                Description = (string)result["overview"]
-                            };
-    
-                            _movieRepository.Add(movie);
-    
-                            var addedMovie = _movieRepository.Search(movie.Title).FirstOrDefault();
-                            if (addedMovie != null)
-                            {
-                                movies.Add(new MovieDTO
+                                var movie = new MovieDTO
                                 {
-                                    Id = addedMovie.Id,
-                                    TheMovieDbId = addedMovie.TheMovieDbId,
-                                    Title = addedMovie.Title,
-                                    Description = addedMovie.Description
-                                });
+                                    Id = 0,
+                                    TheMovieDbId = (int)result["id"],
+                                    Title = title,
+                                    Description = description,
+                                    BannerUrl = bannerUrl
+                                };
+
+                                _movieRepository.Add(movie);
+                                uniqueMovies.Add((title, description));
+
+                                var addedMovie = _movieRepository.Search(movie.Title).FirstOrDefault();
+                                if (addedMovie != null)
+                                {
+                                    movies.Add(new MovieDTO
+                                    {
+                                        Id = addedMovie.Id,
+                                        TheMovieDbId = addedMovie.TheMovieDbId,
+                                        Title = addedMovie.Title,
+                                        Description = addedMovie.Description,
+                                        BannerUrl = addedMovie.BannerUrl
+                                    });
+                                }
                             }
                         }
+
+                        morePages = page < (int)movieContent["total_pages"];
+                        page++;
                     }
-    
-                    morePages = page < (int)movieContent["total_pages"];
-                    page++;
-                }
-                else
-                {
-                    Console.WriteLine("Failed to fetch movies from TMDB API.");
-                    Console.WriteLine("Status Code: " + movieResponse.StatusCode);
-                    Console.WriteLine("Error Message: " + movieResponse.ErrorMessage);
-                    Console.WriteLine("Content: " + movieResponse.Content);
-                    morePages = false;
-                }
-            }
-    
-            // Fetch all pages of TV shows
-            page = 1;
-            morePages = true;
-            while (morePages && page <= maxPages)
-            {
-                var tvRequest = new RestRequest("search/tv", Method.Get);
-                tvRequest.AddHeader("Authorization", $"Bearer {_tmdbApiKey}");
-                tvRequest.AddParameter("query", query);
-                tvRequest.AddParameter("language", "nl,en"); // Include Dutch and English languages
-                tvRequest.AddParameter("sort_by", "popularity.desc");
-                tvRequest.AddParameter("region", "NL"); // Base top results on NL
-                tvRequest.AddParameter("page", page);
-    
-                var tvResponse = await client.ExecuteAsync(tvRequest);
-    
-                if (tvResponse.IsSuccessful)
-                {
-                    var tvContent = JObject.Parse(tvResponse.Content);
-    
-                    foreach (var result in tvContent["results"])
+                    else
                     {
-                        int tmdbId = (int)result["id"];
-                        if (!_movieRepository.Search(tmdbId.ToString()).Any())
+                        Console.WriteLine("Failed to fetch movies from TMDB API.");
+                        Console.WriteLine("Status Code: " + movieResponse.StatusCode);
+                        Console.WriteLine("Error Message: " + movieResponse.ErrorMessage);
+                        Console.WriteLine("Content: " + movieResponse.Content);
+                        morePages = false;
+                    }
+                }
+
+                page = 1;
+                morePages = true;
+                while (morePages && page <= maxPages)
+                {
+                    var tvRequest = new RestRequest("search/tv", Method.Get);
+                    tvRequest.AddHeader("Authorization", $"Bearer {_tmdbApiKey}");
+                    tvRequest.AddParameter("query", query);
+                    tvRequest.AddParameter("region", region);
+                    tvRequest.AddParameter("sort_by", "popularity.desc");
+                    tvRequest.AddParameter("page", page);
+
+                    var tvResponse = await client.ExecuteAsync(tvRequest);
+
+                    if (tvResponse.IsSuccessful)
+                    {
+                        var tvContent = JObject.Parse(tvResponse.Content);
+
+                        foreach (var result in tvContent["results"])
                         {
-                            var tvShow = new MovieDTO
+                            string title = (string)result["name"];
+                            string description = (string)result["overview"];
+                            string bannerUrl = result["poster_path"] != null
+                                ? $"https://image.tmdb.org/t/p/w500{result["poster_path"]}"
+                                : null;
+
+                            if (!uniqueMovies.Contains((title, description)))
                             {
-                                Id = 0,
-                                TheMovieDbId = tmdbId,
-                                Title = (string)result["name"],
-                                Description = (string)result["overview"]
-                            };
-    
-                            _movieRepository.Add(tvShow);
-    
-                            var addedTvShow = _movieRepository.Search(tvShow.Title).FirstOrDefault();
-                            if (addedTvShow != null)
-                            {
-                                movies.Add(new MovieDTO
+                                var tvShow = new MovieDTO
                                 {
-                                    Id = addedTvShow.Id,
-                                    TheMovieDbId = addedTvShow.TheMovieDbId,
-                                    Title = addedTvShow.Title,
-                                    Description = addedTvShow.Description
-                                });
+                                    Id = 0,
+                                    TheMovieDbId = (int)result["id"],
+                                    Title = title,
+                                    Description = description,
+                                    BannerUrl = bannerUrl
+                                };
+
+                                _movieRepository.Add(tvShow);
+                                uniqueMovies.Add((title, description));
+
+                                var addedTvShow = _movieRepository.Search(tvShow.Title).FirstOrDefault();
+                                if (addedTvShow != null)
+                                {
+                                    movies.Add(new MovieDTO
+                                    {
+                                        Id = addedTvShow.Id,
+                                        TheMovieDbId = addedTvShow.TheMovieDbId,
+                                        Title = addedTvShow.Title,
+                                        Description = addedTvShow.Description,
+                                        BannerUrl = addedTvShow.BannerUrl
+                                    });
+                                }
                             }
                         }
+
+                        morePages = page < (int)tvContent["total_pages"];
+                        page++;
                     }
-    
-                    morePages = page < (int)tvContent["total_pages"];
-                    page++;
-                }
-                else
-                {
-                    Console.WriteLine("Failed to fetch TV shows from TMDB API.");
-                    Console.WriteLine("Status Code: " + tvResponse.StatusCode);
-                    Console.WriteLine("Error Message: " + tvResponse.ErrorMessage);
-                    Console.WriteLine("Content: " + tvResponse.Content);
-                    morePages = false;
+                    else
+                    {
+                        Console.WriteLine("Failed to fetch TV shows from TMDB API.");
+                        Console.WriteLine("Status Code: " + tvResponse.StatusCode);
+                        Console.WriteLine("Error Message: " + tvResponse.ErrorMessage);
+                        Console.WriteLine("Content: " + tvResponse.Content);
+                        morePages = false;
+                    }
                 }
             }
+
+            return movies;
         }
-    
-        return movies;
-    }
+
         public void UpdateMovie(MovieDTO movie)
         {
             IMovie movieEntity = new MovieDTO

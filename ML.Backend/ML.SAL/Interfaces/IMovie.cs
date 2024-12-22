@@ -6,4 +6,5 @@ public interface IMovie
     int TheMovieDbId { get; set; }
     string Title { get; set; }
     string Description { get; set; }
+    public string? BannerUrl { get; set; }
 }

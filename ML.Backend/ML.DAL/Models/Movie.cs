@@ -8,4 +8,5 @@ public class Movie : IMovie
     public int TheMovieDbId { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }
+    public string? BannerUrl { get; set; }
 }

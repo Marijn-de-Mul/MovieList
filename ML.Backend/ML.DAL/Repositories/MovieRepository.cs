@@ -22,7 +22,8 @@ namespace ML.DAL.Repositories
                 Id = movie.Id,
                 TheMovieDbId = movie.TheMovieDbId,
                 Title = movie.Title,
-                Description = movie.Description
+                Description = movie.Description,
+                BannerUrl = movie.BannerUrl
             };
             _context.Movies.Add(movieEntity);
             _context.SaveChanges();
@@ -47,7 +48,8 @@ namespace ML.DAL.Repositories
             {
                 Id = movie.Id,
                 Title = movie.Title,
-                Description = movie.Description
+                Description = movie.Description,
+                BannerUrl = movie.BannerUrl
             };
             _context.Movies.Update(movieEntity);
             _context.SaveChanges();
