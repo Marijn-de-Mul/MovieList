@@ -73,5 +73,12 @@ namespace ML.API.Controllers
             _movieListService.RemoveUserFromList(id, userId);
             return Ok();
         }
+        
+        [HttpDelete("{listId}/movie/{movieId}")]
+        public IActionResult RemoveMovieFromList(int listId, int movieId)
+        {
+            _movieListService.RemoveMovieFromList(listId, movieId);
+            return Ok();
+        }
     }
 }

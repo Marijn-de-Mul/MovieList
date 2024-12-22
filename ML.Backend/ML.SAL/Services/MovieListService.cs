@@ -101,5 +101,10 @@ namespace ML.SAL.Services
         {
             _movieListRepository.RemoveUserFromList(id, userId);
         }
+        
+        public void RemoveMovieFromList(int listId, int movieId)
+        {
+            _movieListRepository.RemoveMovieFromList(listId, movieId);
+        }
     }
 }

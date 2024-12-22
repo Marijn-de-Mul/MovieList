@@ -39,7 +39,7 @@ const ListDetails = () => {
   const deleteMovieFromList = async (movieId) => {
     try {
       await axiosInstance.post('', {
-        endpoint: `/api/MovieList/${listId}/movies/${movieId}`,
+        endpoint: `/api/MovieList/${listId}/movie/${movieId}`,
         method: 'DELETE',
         authorization: Cookies.get('auth-token'),
         body: null,
@@ -60,7 +60,13 @@ const ListDetails = () => {
   };
 
   if (!list) {
-    return <div>Loading...</div>;
+    return <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="flex flex-col items-center">
+      <p className="text-gray-600 dark:text-gray-400 text-xl font-bold animate-pulse">
+        Searching<span className="dot1">.</span><span className="dot2">.</span><span className="dot3">.</span>
+      </p>
+    </div>
+  </div>
   }
 
   return (

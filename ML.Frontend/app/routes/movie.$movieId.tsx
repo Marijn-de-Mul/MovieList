@@ -32,11 +32,13 @@ export default function MovieDetails() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-gray-600 dark:text-gray-400 text-xl font-bold animate-pulse">
-          Loading<span className="dot1">.</span><span className="dot2">.</span><span className="dot3">.</span>
-        </p>
-      </div>
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="flex flex-col items-center">
+              <p className="text-gray-600 dark:text-gray-400 text-xl font-bold animate-pulse">
+                Searching<span className="dot1">.</span><span className="dot2">.</span><span className="dot3">.</span>
+              </p>
+            </div>
+          </div>
     );
   }
 

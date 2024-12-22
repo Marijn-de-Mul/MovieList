@@ -222,5 +222,17 @@ namespace ML.DAL.Repositories
                 }
             }
         }
+        
+        public void RemoveMovieFromList(int listId, int movieId)
+        {
+            var movieListMovie = _context.MovieListMovies
+                .FirstOrDefault(mlm => mlm.MovieListId == listId && mlm.MovieId == movieId);
+
+            if (movieListMovie != null)
+            {
+                _context.MovieListMovies.Remove(movieListMovie);
+                _context.SaveChanges();
+            }
+        }
     }
 }

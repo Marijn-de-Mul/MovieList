@@ -10,4 +10,5 @@ public interface IMovieListService
     void DeleteList(int id);
     void ShareList(int id, UserDTO user);
     void RemoveUserFromList(int id, int userId);
+    void RemoveMovieFromList(int id, int movieId);
 }

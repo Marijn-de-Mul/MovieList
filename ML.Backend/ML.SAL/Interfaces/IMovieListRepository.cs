@@ -11,4 +11,6 @@ public interface IMovieListRepository
     void DeleteList(int id);
     void ShareList(int id, IUser user);
     void RemoveUserFromList(int id, int userId);
+    
+    void RemoveMovieFromList(int listId, int movieId);
 }
