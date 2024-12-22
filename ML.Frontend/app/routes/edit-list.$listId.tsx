@@ -11,6 +11,7 @@ const EditList = () => {
   const [movies, setMovies] = useState([]);
   const [sharedWith, setSharedWith] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedList, setSelectedList] = useState(null);
 
   useEffect(() => {
     if (listId) {
@@ -28,10 +29,15 @@ const EditList = () => {
         contentType: 'application/json',
       });
       const lists = response.data;
-      const selectedList = lists.find((list) => list.id === parseInt(listId));
-      setListName(selectedList.name);
-      setMovies(selectedList.movies);
-      setSharedWith(selectedList.sharedWith.map((sw) => sw.user));
+      const list = lists.find((list) => list.id === parseInt(listId));
+      if (list) {
+        setSelectedList(list);
+        setListName(list.name);
+        setMovies(list.movies);
+        setSharedWith(list.sharedWith);
+      } else {
+        console.error('List not found');
+      }
       setLoading(false);
     } catch (error) {
       console.error('Error fetching lists:', error);
@@ -39,12 +45,58 @@ const EditList = () => {
   };
 
   const handleSave = async () => {
+    if (!selectedList) {
+      console.error('Selected list is not defined');
+      return;
+    }
+
     try {
+      const updatedMovies = movies.map((movie) => ({
+        movieListId: listId,
+        movieList: {
+          id: listId,
+          name: listName,
+          userId: selectedList.userId,
+          movies: [],
+          sharedWith: [],
+        },
+        movieId: movie.movie.id,
+        movie: {
+          id: movie.movie.id,
+          theMovieDbId: movie.movie.theMovieDbId,
+          title: movie.movie.title,
+          description: movie.movie.description,
+        },
+      }));
+
+      const updatedSharedWith = sharedWith.map((sw) => ({
+        movieListId: listId,
+        movieList: {
+          id: listId,
+          name: listName,
+          userId: selectedList.userId,
+          movies: [],
+          sharedWith: [],
+        },
+        userId: sw.user.id,
+        user: {
+          id: sw.user.id,
+          username: sw.user.username,
+          password: sw.user.password,
+        },
+      }));
+
       await axiosInstance.post('', {
         endpoint: `/api/MovieList/${listId}`,
         method: 'PUT',
         authorization: Cookies.get('auth-token'),
-        body: { name: listName, movies, sharedWith },
+        body: {
+          id: listId,
+          name: listName,
+          userId: selectedList.userId,
+          movies: updatedMovies,
+          sharedWith: updatedSharedWith,
+        },
         contentType: 'application/json',
       });
       navigate(`/list-details/${listId}`);
@@ -72,6 +124,10 @@ const EditList = () => {
     return <div>Loading...</div>;
   }
 
+  if (!selectedList) {
+    return <div>List not found</div>;
+  }
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4">
@@ -91,8 +147,8 @@ const EditList = () => {
             <ul className="list-disc list-inside space-y-2">
               {sharedWith.length > 0 ? (
                 sharedWith.map((sw) => (
-                  <li key={sw.id} className="text-gray-600 dark:text-gray-400">
-                    {sw.username}
+                  <li key={sw.user.id} className="text-gray-600 dark:text-gray-400">
+                    {sw.user.username}
                   </li>
                 ))
               ) : (
