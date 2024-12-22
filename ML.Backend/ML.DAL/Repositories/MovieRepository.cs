@@ -23,7 +23,9 @@ namespace ML.DAL.Repositories
                 TheMovieDbId = movie.TheMovieDbId,
                 Title = movie.Title,
                 Description = movie.Description,
-                BannerUrl = movie.BannerUrl
+                BannerUrl = string.IsNullOrEmpty(movie.BannerUrl) || movie.BannerUrl == "https://image.tmdb.org/t/p/w500"
+                    ? "https://via.placeholder.com/200x300"
+                    : movie.BannerUrl
             };
             _context.Movies.Add(movieEntity);
             _context.SaveChanges();

@@ -37,7 +37,8 @@ namespace ML.DAL.Repositories
                         {
                             Id = mlm.Movie.Id,
                             Title = mlm.Movie.Title,
-                            Description = mlm.Movie.Description
+                            Description = mlm.Movie.Description,
+                            BannerUrl = mlm.Movie.BannerUrl
                         }
                     }).ToList(),
                     SharedWith = list.SharedWith.Select(mlsw => new MovieListSharedWithDTO
@@ -71,7 +72,8 @@ namespace ML.DAL.Repositories
                         {
                             Id = mlm.Movie.Id,
                             Title = mlm.Movie.Title,
-                            Description = mlm.Movie.Description
+                            Description = mlm.Movie.Description,
+                            BannerUrl = mlm.Movie.BannerUrl
                         }
                     }).ToList(),
                     SharedWith = list.SharedWith.Select(mlsw => new MovieListSharedWithDTO

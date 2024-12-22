@@ -24,7 +24,8 @@ namespace ML.SAL.Services
             {
                 Id = movie.Id,
                 Title = movie.Title,
-                Description = movie.Description
+                Description = movie.Description,
+                BannerUrl = movie.BannerUrl
             };
             _movieRepository.Add(movieEntity);
         }
@@ -36,7 +37,8 @@ namespace ML.SAL.Services
             {
                 Id = movie.Id,
                 Title = movie.Title,
-                Description = movie.Description
+                Description = movie.Description,
+                BannerUrl = movie.BannerUrl
             };
         }
 
@@ -48,7 +50,7 @@ namespace ML.SAL.Services
                 TheMovieDbId = m.TheMovieDbId,
                 Title = m.Title,
                 Description = m.Description,
-                BannerUrl = m.BannerUrl // Include BannerUrl
+                BannerUrl = m.BannerUrl 
             }).ToList();
 
             var uniqueMovies =
@@ -110,7 +112,9 @@ namespace ML.SAL.Services
                                         TheMovieDbId = addedMovie.TheMovieDbId,
                                         Title = addedMovie.Title,
                                         Description = addedMovie.Description,
-                                        BannerUrl = addedMovie.BannerUrl
+                                        BannerUrl = string.IsNullOrEmpty(addedMovie.BannerUrl) || addedMovie.BannerUrl == "https://image.tmdb.org/t/p/w500"
+                                            ? "https://via.placeholder.com/200x300"
+                                            : addedMovie.BannerUrl
                                     });
                                 }
                             }
@@ -177,7 +181,9 @@ namespace ML.SAL.Services
                                         TheMovieDbId = addedTvShow.TheMovieDbId,
                                         Title = addedTvShow.Title,
                                         Description = addedTvShow.Description,
-                                        BannerUrl = addedTvShow.BannerUrl
+                                        BannerUrl = string.IsNullOrEmpty(addedTvShow.BannerUrl) || addedTvShow.BannerUrl == "https://image.tmdb.org/t/p/w500"
+                                            ? "https://via.placeholder.com/200x300"
+                                            : addedTvShow.BannerUrl
                                     });
                                 }
                             }
@@ -206,7 +212,8 @@ namespace ML.SAL.Services
             {
                 Id = movie.Id,
                 Title = movie.Title,
-                Description = movie.Description
+                Description = movie.Description,
+                BannerUrl = movie.BannerUrl
             };
             _movieRepository.Update(movieEntity);
         }

@@ -33,12 +33,12 @@ export default function MovieDetails() {
   if (isLoading) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="flex flex-col items-center">
-              <p className="text-gray-600 dark:text-gray-400 text-xl font-bold animate-pulse">
-                Searching<span className="dot1">.</span><span className="dot2">.</span><span className="dot3">.</span>
-              </p>
-            </div>
-          </div>
+        <div className="flex flex-col items-center">
+          <p className="text-gray-600 dark:text-gray-400 text-xl font-bold animate-pulse">
+            Searching<span className="dot1">.</span><span className="dot2">.</span><span className="dot3">.</span>
+          </p>
+        </div>
+      </div>
     );
   }
 
@@ -57,7 +57,7 @@ export default function MovieDetails() {
       <div className="relative flex flex-col items-center p-4 bg-gray-100 dark:bg-gray-900 min-h-screen overflow-hidden">
         <div className="w-full max-w-md flex flex-col items-center">
           <img
-            src="https://via.placeholder.com/200x300"
+            src={movie.bannerUrl}
             alt="Movie Cover"
             className="w-auto max-w-xs h-[30vh] object-cover rounded-lg shadow-md mb-8"
           />

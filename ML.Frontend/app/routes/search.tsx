@@ -158,18 +158,27 @@ export default function Search() {
           {!isLoading && results.length > 0 && (
             <div className="mt-4 space-y-4">
               {results.map((movie) => (
-                <div key={movie.id} className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                  <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{movie.title}</h2>
-                  <p className="text-gray-600 dark:text-gray-400">{movie.description}</p>
-                  <button
-                    onClick={() => {
-                      console.log('Add to List clicked for movie:', movie.id);
-                      openModal(movie.id);
-                    }}
-                    className="mt-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
-                  >
-                    Add to List
-                  </button>
+                <div key={movie.id} className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md flex">
+                  <img
+                    src={movie.bannerUrl} // Display the bannerUrl
+                    alt={`${movie.title} Banner`}
+                    className="w-32 h-32 object-cover rounded-lg mr-4" // Adjusted size for better visibility
+                  />
+                  <div className="flex flex-col justify-between">
+                    <div>
+                      <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">{movie.title}</h2>
+                      <p className="text-gray-600 dark:text-gray-400">{movie.description}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        console.log('Add to List clicked for movie:', movie.id);
+                        openModal(movie.id);
+                      }}
+                      className="mt-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+                    >
+                      Add to List
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
