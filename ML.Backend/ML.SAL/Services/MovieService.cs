@@ -62,16 +62,7 @@ namespace ML.SAL.Services
 
                 var client = new RestClient("https://api.themoviedb.org/3/");
                 int maxPages = 1000;
-                string region;
-                
-                if (CultureInfo.CurrentCulture.Name == string.Empty)
-                {
-                    region = "NL"; 
-                }
-                else
-                {
-                    region = new RegionInfo(CultureInfo.CurrentCulture.Name).TwoLetterISORegionName;
-                }
+                string region = "US";
 
                 int page = 1;
                 bool morePages = true;
