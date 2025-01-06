@@ -29,4 +29,7 @@ EXPOSE 8080
 
 WORKDIR /app/publish
 
+RUN ls -la /app/build
+RUN ls -la /app/publish
+
 ENTRYPOINT ["dotnet", "ML.API.dll"]
