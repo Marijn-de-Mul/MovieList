@@ -32,4 +32,7 @@ EXPOSE 8080
 
 # Set working directory and entrypoint
 WORKDIR /app/publish
+
+RUN ls -la /app/publish
+
 ENTRYPOINT ["dotnet", "ML.API.dll"]
