@@ -92,7 +92,7 @@ jobs:
             export DOCKER_BUILDKIT=1
             export DOCKER_CLI_EXPERIMENTAL=enabled
 
-            cd /root/docker/movielist_v2
+            cd /root/docker/movielist
 
             docker compose down
 
