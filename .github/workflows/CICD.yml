@@ -88,11 +88,11 @@ jobs:
 
       - name: (Docker) SSH into VPS and Deploy Production Environment
         run: |
-          ssh -o StrictHostKeyChecking=no root@45.140.142.168 '
+          ssh -o StrictHostKeyChecking=no -p 4000 root@marijndemul.ddns.net '
             export DOCKER_BUILDKIT=1
             export DOCKER_CLI_EXPERIMENTAL=enabled
 
-            cd /root/docker/movielist_v2
+            cd /root/docker/movielist
 
             docker compose down
 
