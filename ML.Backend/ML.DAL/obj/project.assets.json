@@ -1042,20 +1042,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Marij\\.nuget\\packages\\": {}
+    "/Users/marijndemul/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Personal\\MovieList\\ML.Backend\\ML.DAL\\ML.DAL.csproj",
+      "projectUniqueName": "/Users/marijndemul/Documents/GitHub/MovieList/ML.Backend/ML.DAL/ML.DAL.csproj",
       "projectName": "ML.DAL",
-      "projectPath": "E:\\Personal\\MovieList\\ML.Backend\\ML.DAL\\ML.DAL.csproj",
-      "packagesPath": "C:\\Users\\Marij\\.nuget\\packages\\",
-      "outputPath": "E:\\Personal\\MovieList\\ML.Backend\\ML.DAL\\obj\\",
+      "projectPath": "/Users/marijndemul/Documents/GitHub/MovieList/ML.Backend/ML.DAL/ML.DAL.csproj",
+      "packagesPath": "/Users/marijndemul/.nuget/packages/",
+      "outputPath": "/Users/marijndemul/Documents/GitHub/MovieList/ML.Backend/ML.DAL/obj/",
       "projectStyle": "PackageReference",
-      "UsingMicrosoftNETSdk": false,
       "configFilePaths": [
-        "C:\\Users\\Marij\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/marijndemul/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -1067,8 +1066,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\Personal\\MovieList\\ML.Backend\\ML.SAL\\ML.SAL.csproj": {
-              "projectPath": "E:\\Personal\\MovieList\\ML.Backend\\ML.SAL\\ML.SAL.csproj"
+            "/Users/marijndemul/Documents/GitHub/MovieList/ML.Backend/ML.SAL/ML.SAL.csproj": {
+              "projectPath": "/Users/marijndemul/Documents/GitHub/MovieList/ML.Backend/ML.SAL/ML.SAL.csproj"
             }
           }
         }
@@ -1113,7 +1112,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files (x86)\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.404/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ML.DAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+110b4c5882cddc2069c6ac0f859ecadd67546d6d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+75c3eb700fd06f100fc342de8d129b5f15f9d827")]
 [assembly: System.Reflection.AssemblyProductAttribute("ML.DAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ML.DAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
