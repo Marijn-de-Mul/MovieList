@@ -1,34 +1,56 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               PostgreSQL 17.2 (Debian 17.2-1.pgdg120+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
--- Server OS:                    
--- HeidiSQL Version:             12.8.0.6908
--- --------------------------------------------------------
+-- Create "MovieLists" table
+CREATE TABLE "MovieLists" (
+    "Id" SERIAL PRIMARY KEY,
+    "Name" TEXT NOT NULL,
+    "userId" INTEGER NOT NULL
+);
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES  */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+-- Create "Movies" table
+CREATE TABLE "Movies" (
+    "Id" SERIAL PRIMARY KEY,
+    "TheMovieDbId" INTEGER NOT NULL,
+    "Title" TEXT NOT NULL,
+    "Description" TEXT NOT NULL
+);
 
+-- Create "Users" table
+CREATE TABLE "Users" (
+    "Id" SERIAL PRIMARY KEY,
+    "Username" TEXT NOT NULL,
+    "Password" TEXT NOT NULL
+);
 
--- Dumping database structure for public
+-- Create "MovieDTO" table
+CREATE TABLE "MovieDTO" (
+    "Id" INTEGER PRIMARY KEY,
+    "TheMovieDbId" INTEGER NOT NULL,
+    "Title" TEXT NOT NULL,
+    "Description" TEXT NOT NULL,
+    CONSTRAINT "FK_MovieDTO_MovieLists" FOREIGN KEY ("Id") REFERENCES "MovieLists"("Id") ON DELETE CASCADE
+);
 
--- Dumping database structure for public
+-- Create "UserDTO" table
+CREATE TABLE "UserDTO" (
+    "Id" INTEGER PRIMARY KEY,
+    "Username" TEXT NOT NULL,
+    "Password" TEXT NOT NULL,
+    CONSTRAINT "FK_UserDTO_MovieLists" FOREIGN KEY ("Id") REFERENCES "MovieLists"("Id") ON DELETE CASCADE
+);
 
--- Dumping database structure for public
+-- Create "MovieListMovies" table
+CREATE TABLE "MovieListMovies" (
+    "MovieListId" INTEGER NOT NULL,
+    "MovieId" INTEGER NOT NULL,
+    CONSTRAINT "PK_MovieListMovies" PRIMARY KEY ("MovieListId", "MovieId"),
+    CONSTRAINT "FK_MovieListMovies_MovieLists" FOREIGN KEY ("MovieListId") REFERENCES "MovieLists"("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_MovieListMovies_Movies" FOREIGN KEY ("MovieId") REFERENCES "Movies"("Id") ON DELETE CASCADE
+);
 
--- Dumping database structure for public
-
--- Dumping database structure for public
-
--- Dumping database structure for public
-
--- Dumping database structure for public
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+-- Create "MovieListSharedWith" table
+CREATE TABLE "MovieListSharedWith" (
+    "MovieListId" INTEGER NOT NULL,
+    "UserId" INTEGER NOT NULL,
+    CONSTRAINT "PK_MovieListSharedWith" PRIMARY KEY ("MovieListId", "UserId"),
+    CONSTRAINT "FK_MovieListSharedWith_MovieLists" FOREIGN KEY ("MovieListId") REFERENCES "MovieLists"("Id") ON DELETE CASCADE,
+    CONSTRAINT "FK_MovieListSharedWith_Users" FOREIGN KEY ("UserId") REFERENCES "Users"("Id") ON DELETE CASCADE
+);
