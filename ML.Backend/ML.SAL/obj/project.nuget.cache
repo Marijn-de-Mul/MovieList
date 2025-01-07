@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "aIApunfvwo0=",
+  "dgSpecHash": "+ixPXy6NKQ4=",
   "success": true,
-  "projectFilePath": "/Users/marijndemul/Documents/GitHub/MovieList/ML.Backend/ML.SAL/ML.SAL.csproj",
+  "projectFilePath": "E:\\Personal\\MovieList\\ML.Backend\\ML.SAL\\ML.SAL.csproj",
   "expectedPackageFiles": [
-    "/Users/marijndemul/.nuget/packages/microsoft.identitymodel.abstractions/8.3.0/microsoft.identitymodel.abstractions.8.3.0.nupkg.sha512",
-    "/Users/marijndemul/.nuget/packages/microsoft.identitymodel.jsonwebtokens/8.3.0/microsoft.identitymodel.jsonwebtokens.8.3.0.nupkg.sha512",
-    "/Users/marijndemul/.nuget/packages/microsoft.identitymodel.logging/8.3.0/microsoft.identitymodel.logging.8.3.0.nupkg.sha512",
-    "/Users/marijndemul/.nuget/packages/microsoft.identitymodel.tokens/8.3.0/microsoft.identitymodel.tokens.8.3.0.nupkg.sha512",
-    "/Users/marijndemul/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
-    "/Users/marijndemul/.nuget/packages/restsharp/112.1.1-alpha.0.1/restsharp.112.1.1-alpha.0.1.nupkg.sha512",
-    "/Users/marijndemul/.nuget/packages/system.identitymodel.tokens.jwt/8.3.0/system.identitymodel.tokens.jwt.8.3.0.nupkg.sha512"
+    "C:\\Users\\Marij\\.nuget\\packages\\microsoft.identitymodel.abstractions\\8.3.0\\microsoft.identitymodel.abstractions.8.3.0.nupkg.sha512",
+    "C:\\Users\\Marij\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\8.3.0\\microsoft.identitymodel.jsonwebtokens.8.3.0.nupkg.sha512",
+    "C:\\Users\\Marij\\.nuget\\packages\\microsoft.identitymodel.logging\\8.3.0\\microsoft.identitymodel.logging.8.3.0.nupkg.sha512",
+    "C:\\Users\\Marij\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.3.0\\microsoft.identitymodel.tokens.8.3.0.nupkg.sha512",
+    "C:\\Users\\Marij\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Marij\\.nuget\\packages\\restsharp\\112.1.1-alpha.0.1\\restsharp.112.1.1-alpha.0.1.nupkg.sha512",
+    "C:\\Users\\Marij\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.3.0\\system.identitymodel.tokens.jwt.8.3.0.nupkg.sha512"
   ],
   "logs": []
 }
