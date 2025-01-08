@@ -11,20 +11,39 @@ const ShareList = () => {
   const [matchingUsers, setMatchingUsers] = useState([]);
   const [shareLink, setShareLink] = useState('');
   const [sharedWith, setSharedWith] = useState([]);
+  const [selectedList, setSelectedList] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     if (listId) {
-      generateShareLink();
-      fetchSharedUsers();
+      fetchCurrentUserId();
     }
   }, [listId]);
 
-  const generateShareLink = () => {
-    const link = `${window.location.origin}/login?redirect=/share/${listId}`;
-    setShareLink(link);
+  useEffect(() => {
+    if (currentUserId) {
+      fetchListDetails();
+    }
+  }, [currentUserId]);
+
+  const fetchCurrentUserId = async () => {
+    try {
+      const response = await axiosInstance.post('', {
+        endpoint: '/api/Auth/me',
+        method: 'GET',
+        authorization: Cookies.get('auth-token'),
+        body: null,
+        contentType: 'application/json',
+      });
+      setCurrentUserId(response.data.userId);
+    } catch (error) {
+      console.error('Error fetching current user ID:', error);
+    }
   };
 
-  const fetchSharedUsers = async () => {
+  const fetchListDetails = async () => {
     try {
       const response = await axiosInstance.post('', {
         endpoint: '/api/MovieList',
@@ -34,11 +53,31 @@ const ShareList = () => {
         contentType: 'application/json',
       });
       const lists = response.data;
-      const selectedList = lists.find((list) => list.id === parseInt(listId));
-      setSharedWith(selectedList.sharedWith.map((sw) => sw.user));
+      const list = lists.find((list) => list.id === parseInt(listId));
+      if (list) {
+        setSelectedList(list);
+        const sharedUsers = list.sharedWith.map((sw) => sw.user);
+        if (list.userId !== currentUserId) {
+          setIsOwner(false);
+        } else {
+          setIsOwner(true);
+          const owner = { id: list.userId, username: `Owner (${list.userId})` };
+          sharedUsers.push(owner);
+        }
+        setSharedWith(sharedUsers);
+        generateShareLink(list.id);
+      } else {
+        console.error('List not found');
+      }
+      setLoading(false);
     } catch (error) {
-      console.error('Error fetching shared users:', error);
+      console.error('Error fetching list details:', error);
     }
+  };
+
+  const generateShareLink = (listId) => {
+    const link = `${window.location.origin}/login?redirect=/share/${listId}`;
+    setShareLink(link);
   };
 
   const searchUsers = async (query) => {
@@ -71,7 +110,7 @@ const ShareList = () => {
       });
       setShareUser('');
       setMatchingUsers([]);
-      fetchSharedUsers();
+      fetchListDetails();
       alert('User added to the list!');
     } catch (error) {
       console.error('Error sharing list:', error);
@@ -79,22 +118,53 @@ const ShareList = () => {
     }
   };
 
-  const removeSharedUser = async (userId) => {
-    try {
-      await axiosInstance.post('', {
-        endpoint: `/api/MovieList/${listId}/user/${userId}`,
-        method: 'DELETE',
-        authorization: Cookies.get('auth-token'),
-        body: null,
-        contentType: 'application/json',
-      });
-      fetchSharedUsers();
-      alert('User removed from the list!');
-    } catch (error) {
-      console.error('Error removing shared user:', error);
-      alert('Failed to remove user. Please try again.');
-    }
-  };
+  if (loading) {
+    return <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="flex flex-col items-center">
+        <p className="text-gray-600 dark:text-gray-400 text-xl font-bold animate-pulse">
+          Loading<span className="dot1">.</span><span className="dot2">.</span><span className="dot3">.</span>
+        </p>
+      </div>
+    </div>;
+  }
+
+  if (!selectedList) {
+    return (
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl space-y-8 text-center">
+            <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-8">Access Denied</h1>
+            <p className="text-gray-600 dark:text-gray-400 text-xl mb-4">You do not have permission to share this list.</p>
+            <button
+              onClick={() => navigate(`/list-details/${listId}`)}
+              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+            >
+              Back to List
+            </button>
+          </div>
+        </div>
+      </ProtectedRoute>
+    );
+  }
+
+  if (!isOwner) {
+    return (
+      <ProtectedRoute>
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4">
+          <div className="w-full max-w-4xl space-y-8 text-center">
+            <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-8">Access Denied</h1>
+            <p className="text-gray-600 dark:text-gray-400 text-xl mb-4">You do not have permission to share this list.</p>
+            <button
+              onClick={() => navigate(`/list-details/${listId}`)}
+              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+            >
+              Back to List
+            </button>
+          </div>
+        </div>
+      </ProtectedRoute>
+    );
+  }
 
   return (
     <ProtectedRoute>
@@ -149,17 +219,8 @@ const ShareList = () => {
             <ul className="list-disc list-inside space-y-2">
               {sharedWith.length > 0 ? (
                 sharedWith.map((user) => (
-                  <li
-                    key={user.id}
-                    className="text-gray-600 dark:text-gray-400 flex justify-between items-center"
-                  >
-                    <span>{user.username}</span>
-                    <button
-                      onClick={() => removeSharedUser(user.id)}
-                      className="ml-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                    >
-                      Remove
-                    </button>
+                  <li key={user.id} className="text-gray-600 dark:text-gray-400">
+                    {user.username}
                   </li>
                 ))
               ) : (

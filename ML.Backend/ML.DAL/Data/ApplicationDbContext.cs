@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using ML.SAL.DTO;
 using ML.SAL.Models;
 
@@ -13,7 +14,6 @@ namespace ML.DAL.Data
         public DbSet<UserDTO> Users { get; set; }
         public DbSet<MovieListDTO> MovieLists { get; set; }
         public DbSet<MovieDTO> Movies { get; set; }
-
         public DbSet<MovieListMoviesDTO> MovieListMovies { get; set; }
         public DbSet<MovieListSharedWithDTO> MovieListSharedWith { get; set; }
 
@@ -46,7 +46,11 @@ namespace ML.DAL.Data
                 .HasOne(mlsw => mlsw.User)
                 .WithMany()
                 .HasForeignKey(mlsw => mlsw.UserId);
+        }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         }
     }
 }

@@ -8,12 +8,35 @@ const ListDetails = () => {
   const { listId } = useParams();
   const navigate = useNavigate();
   const [list, setList] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     if (listId) {
-      fetchLists();
+      fetchCurrentUserId();
     }
   }, [listId]);
+
+  useEffect(() => {
+    if (currentUserId) {
+      fetchLists();
+    }
+  }, [currentUserId]);
+
+  const fetchCurrentUserId = async () => {
+    try {
+      const response = await axiosInstance.post('', {
+        endpoint: '/api/Auth/me',
+        method: 'GET',
+        authorization: Cookies.get('auth-token'),
+        body: null,
+        contentType: 'application/json',
+      });
+      setCurrentUserId(response.data.userId);
+    } catch (error) {
+      console.error('Error fetching current user ID:', error);
+    }
+  };
 
   const fetchLists = async () => {
     try {
@@ -26,7 +49,10 @@ const ListDetails = () => {
       });
       const lists = response.data;
       const selectedList = lists.find((list) => list.id === parseInt(listId));
-      setList(selectedList);
+      if (selectedList) {
+        setList(selectedList);
+        setIsOwner(selectedList.userId === currentUserId);
+      }
     } catch (error) {
       console.error('Error fetching lists:', error);
     }
@@ -59,14 +85,29 @@ const ListDetails = () => {
     navigate(`/share-list/${listId}`);
   };
 
+  const leaveList = async () => {
+    try {
+      await axiosInstance.post('', {
+        endpoint: `/api/MovieList/${listId}/user/${currentUserId}`,
+        method: 'DELETE',
+        authorization: Cookies.get('auth-token'),
+        body: null,
+        contentType: 'application/json',
+      });
+      navigate('/lists');
+    } catch (error) {
+      console.error('Error leaving list:', error);
+    }
+  };
+
   if (!list) {
     return <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div className="flex flex-col items-center">
-      <p className="text-gray-600 dark:text-gray-400 text-xl font-bold animate-pulse">
-        Searching<span className="dot1">.</span><span className="dot2">.</span><span className="dot3">.</span>
-      </p>
-    </div>
-  </div>
+      <div className="flex flex-col items-center">
+        <p className="text-gray-600 dark:text-gray-400 text-xl font-bold animate-pulse">
+          Searching<span className="dot1">.</span><span className="dot2">.</span><span className="dot3">.</span>
+        </p>
+      </div>
+    </div>;
   }
 
   return (
@@ -92,12 +133,14 @@ const ListDetails = () => {
                     className="text-gray-600 dark:text-gray-400 cursor-pointer flex justify-between items-center"
                   >
                     <span onClick={() => viewMovieDetails(movieItem.movie.id)}>{movieItem.movie.title}</span>
-                    <button
-                      onClick={() => deleteMovieFromList(movieItem.movie.id)}
-                      className="ml-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                    >
-                      Delete
-                    </button>
+                    {isOwner && (
+                      <button
+                        onClick={() => deleteMovieFromList(movieItem.movie.id)}
+                        className="ml-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                      >
+                        Delete
+                      </button>
+                    )}
                   </li>
                 ))
               ) : (
@@ -121,18 +164,29 @@ const ListDetails = () => {
             </ul>
           </div>
           <div className="flex justify-center space-x-4 mt-8">
-            <button
-              onClick={editList}
-              className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700"
-            >
-              Edit
-            </button>
-            <button
-              onClick={shareList}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            >
-              Share
-            </button>
+            {isOwner ? (
+              <>
+                <button
+                  onClick={editList}
+                  className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={shareList}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                  Share
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={leaveList}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                Leave
+              </button>
+            )}
             <button
               onClick={() => navigate('/lists')}
               className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
