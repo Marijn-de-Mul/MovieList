@@ -22,7 +22,7 @@ namespace ML.SAL.Services
             var userEntity = new UserDTO
             {
                 Username = user.Username,
-                Password = user.Password 
+                Password = PasswordHelper.HashPassword(user.Password)
             };
             _userRepository.Add(userEntity);
         }
@@ -30,7 +30,7 @@ namespace ML.SAL.Services
         public string Login(UserDTO user)
         {
             var userEntity = _userRepository.GetByUsername(user.Username);
-            if (userEntity != null && userEntity.Password == user.Password)
+            if (userEntity != null && userEntity.Password == PasswordHelper.HashPassword(user.Password))
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET"));
@@ -38,14 +38,16 @@ namespace ML.SAL.Services
                 {
                     Subject = new ClaimsIdentity(new[] { new Claim("id", userEntity.Id.ToString()) }),
                     Expires = DateTime.UtcNow.AddHours(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                        SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 return tokenHandler.WriteToken(token);
             }
+
             return null;
         }
-        
+
         public async Task<List<UserDTO>> SearchUsers(string query)
         {
             var users = _userRepository.Search(query)
