@@ -42,7 +42,7 @@ namespace ML.SAL.Services
             };
         }
 
-        public async Task<List<MovieDTO>> SearchMovies(string query)
+        public async Task<List<MovieDTO>> SearchMovies(string query, string region = "US", string language = "en")
         {
             var movies = _movieRepository.Search(query).Select(m => new MovieDTO
             {
@@ -50,19 +50,17 @@ namespace ML.SAL.Services
                 TheMovieDbId = m.TheMovieDbId,
                 Title = m.Title,
                 Description = m.Description,
-                BannerUrl = m.BannerUrl 
+                BannerUrl = m.BannerUrl
             }).ToList();
 
-            var uniqueMovies =
-                new HashSet<(string Title, string Description)>(movies.Select(m => (m.Title, m.Description)));
+            var uniqueMovies = new HashSet<string>(movies.Select(m => m.Title.ToLower()));
 
             if (movies.Count < 10)
             {
                 Console.WriteLine("Fetching movies and TV shows from TMDB API...");
 
                 var client = new RestClient("https://api.themoviedb.org/3/");
-                int maxPages = 1000;
-                string region = "US";
+                int maxPages = 5; // Limit the number of pages to fetch
 
                 int page = 1;
                 bool morePages = true;
@@ -72,6 +70,7 @@ namespace ML.SAL.Services
                     movieRequest.AddHeader("Authorization", $"Bearer {_tmdbApiKey}");
                     movieRequest.AddParameter("query", query);
                     movieRequest.AddParameter("region", region);
+                    movieRequest.AddParameter("language", language);
                     movieRequest.AddParameter("sort_by", "popularity.desc");
                     movieRequest.AddParameter("page", page);
 
@@ -89,7 +88,7 @@ namespace ML.SAL.Services
                                 ? $"https://image.tmdb.org/t/p/w500{result["poster_path"]}"
                                 : null;
 
-                            if (!uniqueMovies.Contains((title, description)))
+                            if (!uniqueMovies.Contains(title.ToLower()))
                             {
                                 var movie = new MovieDTO
                                 {
@@ -101,7 +100,7 @@ namespace ML.SAL.Services
                                 };
 
                                 _movieRepository.Add(movie);
-                                uniqueMovies.Add((title, description));
+                                uniqueMovies.Add(title.ToLower());
 
                                 var addedMovie = _movieRepository.Search(movie.Title).FirstOrDefault();
                                 if (addedMovie != null)
@@ -112,7 +111,8 @@ namespace ML.SAL.Services
                                         TheMovieDbId = addedMovie.TheMovieDbId,
                                         Title = addedMovie.Title,
                                         Description = addedMovie.Description,
-                                        BannerUrl = string.IsNullOrEmpty(addedMovie.BannerUrl) || addedMovie.BannerUrl == "https://image.tmdb.org/t/p/w500"
+                                        BannerUrl = string.IsNullOrEmpty(addedMovie.BannerUrl) ||
+                                                    addedMovie.BannerUrl == "https://image.tmdb.org/t/p/w500"
                                             ? "https://via.placeholder.com/200x300"
                                             : addedMovie.BannerUrl
                                     });
@@ -141,6 +141,7 @@ namespace ML.SAL.Services
                     tvRequest.AddHeader("Authorization", $"Bearer {_tmdbApiKey}");
                     tvRequest.AddParameter("query", query);
                     tvRequest.AddParameter("region", region);
+                    tvRequest.AddParameter("language", language);
                     tvRequest.AddParameter("sort_by", "popularity.desc");
                     tvRequest.AddParameter("page", page);
 
@@ -158,7 +159,7 @@ namespace ML.SAL.Services
                                 ? $"https://image.tmdb.org/t/p/w500{result["poster_path"]}"
                                 : null;
 
-                            if (!uniqueMovies.Contains((title, description)))
+                            if (!uniqueMovies.Contains(title.ToLower()))
                             {
                                 var tvShow = new MovieDTO
                                 {
@@ -170,7 +171,7 @@ namespace ML.SAL.Services
                                 };
 
                                 _movieRepository.Add(tvShow);
-                                uniqueMovies.Add((title, description));
+                                uniqueMovies.Add(title.ToLower());
 
                                 var addedTvShow = _movieRepository.Search(tvShow.Title).FirstOrDefault();
                                 if (addedTvShow != null)
@@ -181,7 +182,8 @@ namespace ML.SAL.Services
                                         TheMovieDbId = addedTvShow.TheMovieDbId,
                                         Title = addedTvShow.Title,
                                         Description = addedTvShow.Description,
-                                        BannerUrl = string.IsNullOrEmpty(addedTvShow.BannerUrl) || addedTvShow.BannerUrl == "https://image.tmdb.org/t/p/w500"
+                                        BannerUrl = string.IsNullOrEmpty(addedTvShow.BannerUrl) ||
+                                                    addedTvShow.BannerUrl == "https://image.tmdb.org/t/p/w500"
                                             ? "https://via.placeholder.com/200x300"
                                             : addedTvShow.BannerUrl
                                     });
@@ -203,7 +205,9 @@ namespace ML.SAL.Services
                 }
             }
 
-            return movies;
+            return movies.OrderByDescending(m => m.Title.Equals(query, StringComparison.OrdinalIgnoreCase))
+                .ThenByDescending(m => m.TheMovieDbId)
+                .ToList();
         }
 
         public void UpdateMovie(MovieDTO movie)

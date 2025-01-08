@@ -17,7 +17,7 @@ namespace ML.API.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> SearchMovies(string query)
         {
-            var movies = await _movieService.SearchMovies(query);
+            var movies = await _movieService.SearchMovies(query, "US", "en");
             return Ok(movies);
         }
         
