@@ -133,14 +133,12 @@ const ListDetails = () => {
                     className="text-gray-600 dark:text-gray-400 cursor-pointer flex justify-between items-center"
                   >
                     <span onClick={() => viewMovieDetails(movieItem.movie.id)}>{movieItem.movie.title}</span>
-                    {isOwner && (
-                      <button
-                        onClick={() => deleteMovieFromList(movieItem.movie.id)}
-                        className="ml-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-                      >
-                        Delete
-                      </button>
-                    )}
+                    <button
+                      onClick={() => deleteMovieFromList(movieItem.movie.id)}
+                      className="ml-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+                    >
+                      Delete
+                    </button>
                   </li>
                 ))
               ) : (

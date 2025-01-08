@@ -63,18 +63,27 @@ namespace ML.SAL.Services
                 throw new InvalidOperationException("Movie list not found.");
             }
 
-            if (existingList.userId != userId && !existingList.SharedWith.Any(u => u.UserId == userId))
+            if (existingList.userId == userId)
+            {
+                _movieListRepository.EditList(id, list);
+            }
+            else if (existingList.SharedWith.Any(u => u.UserId == userId))
+            {
+                var sharedUser = existingList.SharedWith.First(u => u.UserId == userId);
+
+                existingList.Movies = list.Movies;
+
+                if (!list.SharedWith.Any(u => u.UserId == userId))
+                {
+                    existingList.SharedWith.Remove(sharedUser);
+                }
+
+                _movieListRepository.EditList(id, existingList);
+            }
+            else
             {
                 throw new UnauthorizedAccessException("User does not have permission to edit this list.");
             }
-
-            foreach (var sharedWith in list.SharedWith)
-            {
-                sharedWith.MovieList = list;
-                sharedWith.User.Password = "defaultPassword"; 
-            }
-
-            _movieListRepository.EditList(id, list);
         }
 
         public void DeleteList(int id)
